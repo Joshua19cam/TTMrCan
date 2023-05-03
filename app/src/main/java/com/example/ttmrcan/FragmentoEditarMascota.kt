@@ -1,11 +1,14 @@
 package com.example.ttmrcan
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.example.ttmrcan.databinding.FragmentFragmentoEditarMascotaBinding
 import kotlinx.coroutines.CoroutineScope
@@ -98,7 +101,7 @@ class FragmentoEditarMascota : Fragment() {
             activity?.runOnUiThread{
                 if (call.isSuccessful){
                     Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
-
+                    mostrarDialogo()
                     requireActivity().onBackPressed()
 
                 }else{
@@ -111,6 +114,18 @@ class FragmentoEditarMascota : Fragment() {
     fun validarCampos(): Boolean{
         return !(binding.editNombreMascotaE.text.isNullOrEmpty()||binding.editColorMascotaE.text.isNullOrEmpty()
                 ||binding.editRazaMascotaE.text.isNullOrEmpty()||binding.editFechaMascotaE.text.isNullOrEmpty())
+    }
+
+    private fun mostrarDialogo() {
+        val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo?.setContentView(R.layout.dialogo_cambio_exitoso)
+        val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_correcto)
+        titulo?.text = "Los datos de su mascota se actualizaron correctamente"
+        dialogo?.setCancelable(true)
+        dialogo?.show()
+        Handler().postDelayed({
+            dialogo?.dismiss()
+        }, 5000)
     }
 
     companion object {
