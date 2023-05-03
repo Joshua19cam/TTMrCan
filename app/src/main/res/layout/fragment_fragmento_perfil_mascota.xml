@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentoPerfilMascota">
+
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="209dp"
+        android:layout_height="155dp"
+        android:background="@drawable/datos_gris"
+        android:fontFamily="@font/nunito"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:text="Nacimiento: 00/00/0000\n\nRaza: Ejemplo\n\nPadecimientos: Ninguno\n\nSexo: No binario"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/tableRow2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/shapeableImageView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:ignore="MissingConstraints,RtlSymmetry,TextSizeCheck" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeableImageView2"
+        android:layout_width="155dp"
+        android:layout_height="155dp"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="true"
+        android:elevation="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/perrito"
+        app:layout_constraintBottom_toTopOf="@+id/tableRow2"
+        app:layout_constraintEnd_toStartOf="@+id/textViewInfo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.521"
+        app:shapeAppearanceOverlay="@style/roundimageview"
+        tools:ignore="MissingConstraints" />
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="375dp"
+        android:layout_height="504dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/textViewProducto"
+            android:layout_width="12dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Producto"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="29dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Quien aplicó"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Peso(Kg)"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fecha"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="47dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Observaciones"
+            android:textAlignment="center" />
+    </TableRow>
+
+    <TextView
+        android:id="@+id/textViewNombre"
+        android:layout_width="118dp"
+        android:layout_height="36dp"
+        android:background="@drawable/datos_perfil_blanco"
+        android:elevation="10dp"
+        android:fontFamily="@font/nunito_bold"
+        android:paddingTop="8dp"
+        android:text="NOMBRE"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView2"
+        app:layout_constraintEnd_toStartOf="@+id/shapeableImageView2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/shapeableImageView2"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView2"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="DATOS"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

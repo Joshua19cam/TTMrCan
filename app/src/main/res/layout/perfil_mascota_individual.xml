@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/redondear_dialogos"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageViewMascota"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/perrito"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundimageview"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonEditarMisMascotas"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:background="@drawable/stylo_margen_circular"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonDarBaja"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:background="@drawable/stylo_margen_circular_baja"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_borrar"
+        app:iconTint="#FFFF5252"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEditarMisMascotas"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewMascotaNombre"
+        android:layout_width="118dp"
+        android:layout_height="36dp"
+        android:background="@drawable/datos_perfil_blanco"
+        android:elevation="10dp"
+        android:fontFamily="@font/nunito_bold"
+        android:paddingTop="8dp"
+        android:text="Nombre"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView3"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints,UnknownId" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
