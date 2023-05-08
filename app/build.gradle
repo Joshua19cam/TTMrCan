@@ -48,7 +48,7 @@ dependencies {
     //Dependencia para usar recyclerview
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
     //Dependencia para las animaciones
-    implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation 'com.airbnb.android:lottie:6.0.0'
 
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
     //Dependencia para hacer las imagenes circulares

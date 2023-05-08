@@ -35,8 +35,7 @@ class RegistroCliente : AppCompatActivity() {
                 if(!isEditando){
                     agregarUsuario()
                     val intent = Intent(this, RegistroClienteV::class.java)
-/*                    intent.putExtra("usuarioEmail",usuario.email_usuario)
-                    intent.putExtra("usuarioNombre",usuario.nombre_usuario)*/
+                    intent.putExtra("usuarioEmail",usuario.email_usuario)
                     startActivity(intent)
                 }
             }

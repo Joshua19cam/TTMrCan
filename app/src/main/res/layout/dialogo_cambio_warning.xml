@@ -20,7 +20,7 @@
             android:layout_margin="10dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="center"
-            android:text="@string/text_titulo"
+            android:text="TITULO"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_gravity="center"
@@ -33,7 +33,7 @@
             android:layout_margin="10dp"
             android:fontFamily="@font/nunito_extralight"
             android:gravity="center"
-            android:text="@string/text_titulo"
+            android:text="SUBTITULO"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_gravity="center"
@@ -63,7 +63,7 @@
                 android:layout_width="70dp"
                 android:layout_height="50dp"
                 android:backgroundTint="#FFFFFF"
-                android:text="@string/si_button"
+                android:text="SI"
                 android:textColor="#5CBBF6" />
 
             <Button
@@ -72,7 +72,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="16dp"
                 android:backgroundTint="#FFFFFF"
-                android:text="@string/no_button"
+                android:text="NO"
                 android:textColor="#FF5252" />
 
         </LinearLayout>

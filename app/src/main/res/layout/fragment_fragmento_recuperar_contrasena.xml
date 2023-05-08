@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentoRecuperarContrasena">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="¿Olvidaste tu Contraseña?"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/cute_dog" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:text="Ingresa tu correo electrónico para recuperar tu contraseña"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvNombreRegistro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/mulish_bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="Correo Electrónico"/>
+
+        <EditText
+            android:id="@+id/editTextCorreoOP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="30dp"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:background="@drawable/borde_azul"
+            android:ems="10"
+            android:fontFamily="@font/mulish_bold"
+            android:hint="Ingrese su correo electrónico"
+            android:inputType="textEmailAddress"/>
+
+        <Button
+            android:id="@+id/btnEnviarP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/verde"
+            android:fontFamily="@font/nunito_extrabold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Enviar Contraseña"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="50dp" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- tools:context=".FragmentoRecuperarContrasena" -->

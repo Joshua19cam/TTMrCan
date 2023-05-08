@@ -1,5 +1,6 @@
 package com.example.ttmrcan
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -62,19 +63,21 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
 
         val fragmentoAgregarMascota = FragmentoAgregarMascota()
 
+        val idUsuario = arguments?.getString("recivId")
+
         binding.recyclerViewMascotas.layoutManager = LinearLayoutManager(activity)
         binding.recyclerViewMascotas.layoutManager = GridLayoutManager(activity,2)
         setupRecyclerView()
 
-        obtenerMascotas()
+        obtenerMascotas(idUsuario.toString().toInt())
 
         binding.buttonAgregarMascota.setOnClickListener {
             val fragmentTransaction = requireFragmentManager().beginTransaction()
             fragmentTransaction.setCustomAnimations(
-                android.R.anim.fade_in, // entrada para el fragmento que se está agregando
-                android.R.anim.fade_out, // salida para el fragmento actual
-                android.R.anim.fade_in, // entrada para el fragmento actualizado
-                android.R.anim.fade_out // salida para el fragmento actualizado
+                R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+                R.anim.exit_left, // salida para el fragmento actual
+                R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+                R.anim.exit_rigth // salida para el fragmento actualizado
             )
             fragmentTransaction.replace(R.id.frameContainerMisMascotas, fragmentoAgregarMascota)
             fragmentTransaction.addToBackStack(null)
@@ -82,15 +85,15 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         }
     }
 
-    fun obtenerMascotas(){
+    fun obtenerMascotas(id: Int){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.obtenerMascotasUsuario(6) //estoy usando de ejemplo el 6
+            val call = RetrofitClient.webServ.obtenerMascotasUsuario(id) //estoy usando de ejemplo el 6
             activity?.runOnUiThread{
-                if(call.isSuccessful){
+                if(call.isSuccessful && call.body() != null ){
                     listaMascotas = call.body()!!.listaMascotas
                     setupRecyclerView()
                 }else{
-                    Toast.makeText(activity,"ERROR CONSULTAR TODOS",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"No tienes mascotas aún",Toast.LENGTH_SHORT).show()
                 }
             }
         }

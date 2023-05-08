@@ -5,21 +5,20 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 object AppConstantes{
-    const val  BASE_URL = "http:// 192.168.0.111:4000"
+    const val  BASE_URL = "http://192.168.100.78:4000"
 }
 
 interface WebServ {
 
     @GET("/usuario/{email_usuario}")
     suspend fun obtenerIdUsuario(
-        @Path("email_usuario") email_usuario: String
+        @Path("email_usuario") email_usuario: String?
     ): Response<Usuario>
 
     @GET("/mascotas/{id_usuario}")
@@ -27,14 +26,26 @@ interface WebServ {
         @Path("id_usuario") id_usuario: Int
     ): Response<MascotasResponse>
 
+    @GET("/usuarioLogin/{email_usuario}/{password_usuario}")
+    suspend fun checarLogin(
+        @Path("email_usuario") email_usuario: String,
+        @Path("password_usuario") password_usuario: String
+    ): Response<Token>
+
     @POST("/usuario/add")
     suspend fun agregarUsuario(
         @Body usuario: Usuario
     ): Response<String>
 
+
     @POST("/mascota/add")
     suspend fun agregarMascota(
         @Body mascota: Mascota
+    ): Response<String>
+
+    @POST("/enviarCorreo")
+    suspend fun enviarCorreo(
+        @Body correo: String
     ): Response<String>
 
     @PUT("/usuario/update/{id}")

@@ -1,5 +1,7 @@
 package com.example.ttmrcan
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.example.ttmrcan.databinding.FragmentFragmentoCapchaBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoClienteNRBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,21 +52,54 @@ class FragmentoClienteNR : Fragment() {
         return binding.root
     }
     //Aqui se realiza toda la programacion del fragment
+
+    lateinit var usuarioNR: Usuario
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var usuarioNR: Usuario
+        val sharedPreferences = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val emailUsuario = arguments?.getString("emailUsuario")
+        val idUsuario = arguments?.getString("idUsuario")
 
-        val tvNombre = view.findViewById<TextView>(R.id.textNombreCliente)
-        val tvinfoDatos = view.findViewById<TextView>(R.id.textViewInfoDatos)
+        mostrarPerfilNR(emailUsuario.toString())
+
+        // Agregar un listener al botón "Cerrar sesión"
+        binding.btnCerrarSesion.setOnClickListener {
+            // Eliminar los datos guardados en SharedPreferences
+            val editor = sharedPreferences.edit()
+            editor.remove("correo")
+            editor.remove("contraseña")
+            editor.apply()
+
+            // Abrir la pantalla de inicio de sesión
+
+            val fragmentoLogin = FragmentoLogin()
+
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.frameContainerLogin, fragmentoLogin)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+
+        }
+
+        binding.btnVerMascotas.setOnClickListener {
+
+            val intent = Intent(activity, MisMascotas::class.java)
+            intent.putExtra("idUsuario",idUsuario)
+            startActivity(intent)
+        }
+
+    }
+
+    fun mostrarPerfilNR(email : String){
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.obtenerIdUsuario("joshuacam.mx")
+            val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             activity?.runOnUiThread{
                 if(call.isSuccessful){
                     usuarioNR = call.body()!!
-                    tvNombre.setText("${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}")
-                    tvinfoDatos.setText("La Informacionde la mascota es: \n ${usuarioNR.id_usuario} " +
+                    binding.textNombreCliente.setText("${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}")
+                    binding.textViewInfoDatos.setText("La Informacionde la mascota es: \n ${usuarioNR.id_usuario} " +
                             "\n ${usuarioNR.nombre_usuario} \n ${usuarioNR.apellido_usuario}")
                     Toast.makeText(activity,"Ya jala",Toast.LENGTH_SHORT).show()
                 }else{
@@ -73,7 +107,6 @@ class FragmentoClienteNR : Fragment() {
                 }
             }
         }
-
     }
 
 
