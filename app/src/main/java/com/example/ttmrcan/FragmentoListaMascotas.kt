@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ttmrcan.databinding.FragmentFragmentoAgregarMascotaBinding
@@ -57,21 +58,24 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
     lateinit var adaptador: MascotaAdapter
     var listaMascotas = arrayListOf<Mascota>()
     lateinit var mascotaNueva : Mascota
+    private var backPressedTime = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fragmentoAgregarMascota = FragmentoAgregarMascota()
+        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+        val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
 
-        val idUsuario = arguments?.getString("recivId")
+        val fragmentoAgregarMascota = FragmentoAgregarMascota()
 
         binding.recyclerViewMascotas.layoutManager = LinearLayoutManager(activity)
         binding.recyclerViewMascotas.layoutManager = GridLayoutManager(activity,2)
         setupRecyclerView()
 
-        obtenerMascotas(idUsuario.toString().toInt())
+        obtenerMascotas(valorUsuarioId)
 
         binding.buttonAgregarMascota.setOnClickListener {
+
             val fragmentTransaction = requireFragmentManager().beginTransaction()
             fragmentTransaction.setCustomAnimations(
                 R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
@@ -79,17 +83,29 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
                 R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
                 R.anim.exit_rigth // salida para el fragmento actualizado
             )
-            fragmentTransaction.replace(R.id.frameContainerMisMascotas, fragmentoAgregarMascota)
+            fragmentTransaction.replace(R.id.fragment_container, fragmentoAgregarMascota)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
+        //Esto es para que se salga de la app estando en el fragment login
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - backPressedTime < 2000) {
+                    requireActivity().finish()
+                } else {
+                    backPressedTime = currentTime
+                    Toast.makeText(requireContext(), "Presiona de nuevo para salir", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     fun obtenerMascotas(id: Int){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.obtenerMascotasUsuario(id) //estoy usando de ejemplo el 6
+            val call = RetrofitClient.webServ.obtenerMascotasUsuario(id)
             activity?.runOnUiThread{
-                if(call.isSuccessful && call.body() != null ){
+                if(call.isSuccessful){
                     listaMascotas = call.body()!!.listaMascotas
                     setupRecyclerView()
                 }else{
@@ -139,7 +155,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         fragmentoEditarMascota.arguments = args
 
         val fragmentTransaction = requireFragmentManager().beginTransaction()
-        fragmentTransaction.replace(R.id.frameContainerMisMascotas, fragmentoEditarMascota)
+        fragmentTransaction.replace(R.id.fragment_container, fragmentoEditarMascota)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
@@ -163,8 +179,10 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         fragmentoVerPerfil.arguments = args
 
         val fragmentTransaction = requireFragmentManager().beginTransaction()
-        fragmentTransaction.replace(R.id.frameContainerMisMascotas, fragmentoVerPerfil)
+        fragmentTransaction.replace(R.id.fragment_container, fragmentoVerPerfil)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+
+
 }

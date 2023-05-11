@@ -2,15 +2,14 @@ package com.example.ttmrcan
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import com.example.ttmrcan.databinding.FragmentFragmentoClienteNRBinding
+import com.example.ttmrcan.databinding.FragmentFragmentoLoginBinding
+import com.example.ttmrcan.databinding.FragmentFragmentoPerfilUsuarioBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,15 +21,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [FragmentoClienteNR.newInstance] factory method to
+ * Use the [FragmentoPerfilUsuario.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FragmentoClienteNR : Fragment() {
+class FragmentoPerfilUsuario : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding: FragmentFragmentoClienteNRBinding
+    private lateinit var binding: FragmentFragmentoPerfilUsuarioBinding
     private lateinit var inflater: LayoutInflater
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,27 +44,26 @@ class FragmentoClienteNR : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         this.inflater = inflater
-        this.binding = FragmentFragmentoClienteNRBinding.inflate(inflater, container, false)
+        this.binding = FragmentFragmentoPerfilUsuarioBinding.inflate(inflater, container, false)
 
         return binding.root
     }
-    //Aqui se realiza toda la programacion del fragment
 
-    lateinit var usuarioNR: Usuario
+    lateinit var usuario: Usuario
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Se manda llamar las variables guardadas en SharedPreferences guardadas anteriormente
+
+        //TODO
         val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
 
-        // Función que se encarga de llamar al metodo para obtener los datos del correo ingresado
         mostrarPerfilNR(valorObtenidoEmail.toString())
 
-    }
 
+    }
 
     @SuppressLint("SetTextI18n")
     fun mostrarPerfilNR(email : String){
@@ -74,23 +72,17 @@ class FragmentoClienteNR : Fragment() {
             val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             activity?.runOnUiThread{
                 if(call.isSuccessful){
-                    usuarioNR = call.body()!!
-                    binding.textNombreCliente.setText(
-                        "${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}"
+                    usuario = call.body()!!
+                    binding.textViewInfoP.setText(
+                        "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
                     )
-                    binding.textViewInfoDatos.setText(
-                        "Información personal:" +
-                                "\n ${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}"+
-                                "\n ${usuarioNR.telefono_usuario}"+
-                                "\n ${usuarioNR.email_usuario}")
+                    binding.textViewInfoCitas.setText("Citas estéticas: 0\nCitas médicas: 0\nCitas vacunación: 0")
                 }else{
-                    Toast.makeText(activity,"Error al consultar usuario",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Error al consultar usuario", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -98,12 +90,12 @@ class FragmentoClienteNR : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentoClienteNR.
+         * @return A new instance of fragment FragmentoPerfilUsuario.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            FragmentoClienteNR().apply {
+            FragmentoPerfilUsuario().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

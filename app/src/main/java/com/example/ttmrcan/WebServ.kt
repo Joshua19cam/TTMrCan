@@ -45,7 +45,7 @@ interface WebServ {
 
     @POST("/enviarCorreo")
     suspend fun enviarCorreo(
-        @Body correo: String
+        @Body email_usuario: CorreoDestino
     ): Response<String>
 
     @PUT("/usuario/update/{id}")

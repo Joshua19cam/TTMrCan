@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_mascotas"
+            android:title="Mis Mascotas"
+            android:icon="@drawable/baseline_home_24"/>
+        <item
+            android:id="@+id/nav_citas"
+            android:title="Citas"
+            android:icon="@drawable/baseline_calendar_today_24"/>
+        <item
+            android:id="@+id/nav_perfil"
+            android:title="Mi Cuenta"
+            android:icon="@drawable/ic_launcher_foreground"/>
+
+    </group>
+    <group android:id="@+id/menu_group">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/stethoscope"
+            android:title="Cerrar Sesion"/>
+    </group>
+</menu>

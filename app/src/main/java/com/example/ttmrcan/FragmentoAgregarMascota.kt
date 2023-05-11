@@ -1,5 +1,6 @@
 package com.example.ttmrcan
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -56,21 +57,24 @@ class FragmentoAgregarMascota : Fragment() {
 
     var mascota = Mascota(1,"","","",
         "","","",0,"",-1)
-    var usuarioID = 6
+    //var usuarioID = 6
     var isEditando = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+        val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
 
         binding.buttonCancelar.setOnClickListener {
             requireActivity().onBackPressed()
         }
 
         binding.buttonGuardar.setOnClickListener {
-            var isValido = validarCampos()
+            val isValido = validarCampos()
             if(isValido){
                 if(!isEditando){
-                    agregarMascota()
+                    agregarMascota(valorUsuarioId)
                 }
             }
         }
@@ -81,13 +85,13 @@ class FragmentoAgregarMascota : Fragment() {
                 ||binding.editColorMascotaA.text.isNullOrEmpty()||binding.editRazaMascotaA.text.isNullOrEmpty()
                 ||binding.editFechaMascotaA.text.isNullOrEmpty())
     }
-    fun agregarMascota(){
+    fun agregarMascota(idUsuario: Int){
         this.mascota.nombre_mascota = binding.editNombreMascotaA.text.toString()
         this.mascota.sexo_mascota = binding.editSexoMascotaA.text.toString()
         this.mascota.color_mascota = binding.editColorMascotaA.text.toString()
         this.mascota.raza_mascota = binding.editRazaMascotaA.text.toString()
         this.mascota.fecha_nacimiento_mascota = binding.editFechaMascotaA.text.toString()
-        this.mascota.id_usuario = usuarioID
+        this.mascota.id_usuario = idUsuario
 
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.agregarMascota(mascota)

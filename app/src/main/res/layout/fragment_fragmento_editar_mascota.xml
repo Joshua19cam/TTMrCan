@@ -11,14 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="157dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="157dp"
-        android:layout_marginBottom="16dp"
         android:fontFamily="@font/nunito_bold"
         android:text="Editar mascota"
         android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -27,11 +26,12 @@
         android:id="@+id/imageView2"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/perrito"
         app:civ_border_color="#3d76f2"
         app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         tools:ignore="MissingConstraints" />
@@ -102,8 +102,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/borde_azul"
                 android:ems="10"
-                android:text="COLOR"
                 android:inputType="textPersonName"
+                android:text="COLOR"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <TextView
@@ -121,8 +121,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/borde_azul"
                 android:ems="10"
-                android:text="RAZA"
                 android:inputType="textPersonName"
+                android:text="RAZA"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <TextView
@@ -140,8 +140,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/borde_azul"
                 android:ems="10"
-                android:text="AAAA-MM-DD"
                 android:inputType="textPersonName"
+                android:text="AAAA-MM-DD"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
 
@@ -164,10 +164,12 @@
         app:backgroundTint="@null"
         app:icon="@drawable/ic_close"
         app:iconTint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonGuardarEditar"
         app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
     <Button

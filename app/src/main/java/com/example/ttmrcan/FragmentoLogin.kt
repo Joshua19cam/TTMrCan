@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.ttmrcan.databinding.FragmentFragmentoLoginBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,17 +50,19 @@ class FragmentoLogin : Fragment() {
 
         return binding.root
     }
+
+    private var backPressedTime = 0L
     var token = Token(-1)
     lateinit var usuario: Usuario
+    //val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
-        val correoGuardado = sharedPreferences.getString("correo", null)
-        val contraseñaGuardada = sharedPreferences.getString("contraseña", null)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val correoGuardado = sharedPreferencesLogin.getString("correo", null)
 
-        if (correoGuardado != null && contraseñaGuardada != null) {
+        if (correoGuardado != null) {
             // Los datos del usuario ya se han guardado. Inicia automáticamente la siguiente pantalla de la aplicación.
             corroborarEstaus(correoGuardado)
         } else {
@@ -67,21 +70,19 @@ class FragmentoLogin : Fragment() {
 
             binding.btnIngresar.setOnClickListener {
                 val correo = binding.editTextCorreoLogIn.text.toString()
-                val contraseña = binding.editTextPasswordLogIn.text.toString()
+                val contrasena = binding.editTextPasswordLogIn.text.toString()
 
-                if (correo.isNotEmpty() && contraseña.isNotEmpty()) {
+                if (correo.isNotEmpty() && contrasena.isNotEmpty()) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        val call = RetrofitClient.webServ.checarLogin(correo,contraseña)
+                        val call = RetrofitClient.webServ.checarLogin(correo,contrasena)
                         activity?.runOnUiThread{
                             if (call.isSuccessful){
                                 token=call.body()!!
                                 if (token.existe_usuario==1){
                                     // Los datos de inicio de sesión son correctos. Guarda los datos del usuario en SharedPreferences y pasa a la siguiente pantalla.
-                                    val editor = sharedPreferences.edit()
+                                    val editor = sharedPreferencesLogin.edit()
                                     editor.putString("correo", correo)
-                                    editor.putString("contraseña", contraseña)
                                     editor.apply()
-                                    Toast.makeText(activity,"El usuario si existe", Toast.LENGTH_SHORT).show()
                                     //TODO cuando si existe el usuario, siguiente pantalla
                                     corroborarEstaus(correo)
                                 }else{
@@ -98,6 +99,19 @@ class FragmentoLogin : Fragment() {
                 }
             }
         }
+        //Esto es para que se salga de la app estando en el fragment login
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - backPressedTime < 2000) {
+                    requireActivity().finish()
+                } else {
+                    backPressedTime = currentTime
+                    Toast.makeText(requireContext(), "Presiona de nuevo para salir", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
 
 // ESTOS SON LOS LISTENER DE LOS BOTONES
 
@@ -117,27 +131,39 @@ class FragmentoLogin : Fragment() {
     }
 
     fun corroborarEstaus(email : String){
+
+        val sharedPreferencesUsuario = requireActivity().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
                     usuario=call.body()!!
                     if (usuario.estatus_usuario==1){
-                        //lo manda al perfil que esta dado de alta
+                        //lo manda al perfil que esta dado de alta --Lo de pala
+                        sharedPreferencesUsuario.edit().putInt("id",usuario.id_usuario).apply()
+                        sharedPreferencesUsuario.edit().putString("email",usuario.email_usuario).apply()
+                        sharedPreferencesUsuario.edit().putString("nombreCompleto",usuario.nombre_usuario+usuario.apellido_usuario).apply()
+                        // Cambio del fragment Login a la activity MenuCliente cuando ya está dado de alta en el sistema
+                        val intent = Intent(activity, MenuClienteR::class.java)
+                        startActivity(intent)
+                        // Se limpian los edit text
+                        binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")
 
                     }else{
-                        //lo manda al perfil que NO esta dado de alta
+                        //Lo manda al perfil que NO esta dado de alta
                         val fragmentoClienteNR = FragmentoClienteNR()
-                        val args = Bundle()
-
-                        args.putString("emailUsuario", email)
-                        args.putString("idUsuario",usuario.id_usuario.toString())
-                        fragmentoClienteNR.arguments = args
-
+                        // Almacena El id y el email del usuario en sharedPreferences para utilizarlos en los demas fragments
+                        sharedPreferencesUsuario.edit().putString("email",usuario.email_usuario).apply()
+                        // Cambio del fragment Login al fragment ClienteNR cuando no está dado de alta en el sistema
                         val fragmentTransaction = requireFragmentManager().beginTransaction()
                         fragmentTransaction.replace(R.id.frameContainerLogin, fragmentoClienteNR)
                         fragmentTransaction.addToBackStack(null)
                         fragmentTransaction.commit()
+                        // Se limpian los edit text
+                        binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")
                     }
 
                 }else{

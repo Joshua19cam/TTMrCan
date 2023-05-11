@@ -53,4 +53,10 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/paw" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frameContainerLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

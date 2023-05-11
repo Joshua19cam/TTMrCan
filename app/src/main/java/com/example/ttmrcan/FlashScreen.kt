@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 
 class FlashScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +23,14 @@ class FlashScreen : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                val intent = Intent(applicationContext, LogIn::class.java).apply{}
-                startActivity(intent)
+
+                supportFragmentManager.commit {
+                    replace<FragmentoLogin>(R.id.frameContainerLogin)
+                    setReorderingAllowed(true)
+                    addToBackStack("replacement")
+                }
+                /*val intent = Intent(applicationContext, LogIn::class.java).apply{}
+                startActivity(intent)*/
             }
 
         }.start()

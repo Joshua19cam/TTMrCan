@@ -1,12 +1,14 @@
 package com.example.ttmrcan
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
-import com.example.ttmrcan.databinding.FragmentFragmentoPerfilMascotaBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoRecuperarContrasenaBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,29 +50,43 @@ class FragmentoRecuperarContrasena : Fragment() {
 
         return binding.root
     }
-
+     var correoDestino = CorreoDestino("")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val correoOP = binding.editTextCorreoOP.text.toString()
-
         //TODO
         binding.btnEnviarP.setOnClickListener {
+            val correoOP = binding.editTextCorreoOP.text.toString()
+            correoDestino.email_usuario = correoOP
             if (correoOP.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val call = RetrofitClient.webServ.enviarCorreo(correoOP)
+                    val call = RetrofitClient.webServ.enviarCorreo(correoDestino)
                     activity?.runOnUiThread{
                         if (call.isSuccessful){
-                            Toast.makeText(activity,"Si se mando el correo", Toast.LENGTH_SHORT).show()
+                            mostrarDialogo()
+                            requireActivity().onBackPressed()
+                            //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                         }else{
                             Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
+            }else{
+                Toast.makeText(activity,"Aun no se ingresa ningun correo", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-
+    private fun mostrarDialogo() {
+        val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo?.setContentView(R.layout.dialogo_cambio_exitoso)
+        val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_correcto)
+        titulo?.text = "Mensaje enviado. Por favor, revise su bandeja de entrada."
+        dialogo?.setCancelable(true)
+        dialogo?.show()
+        Handler().postDelayed({
+            dialogo?.dismiss()
+        }, 3000)
     }
 
     companion object {
