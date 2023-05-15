@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import com.example.ttmrcan.databinding.FragmentFragmentoCitasBinding
 
 
@@ -32,6 +33,11 @@ class FragmentoCitas : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        // Permitir el manejo de eventos de retroceso en este fragmento
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // Manejar el evento de retroceso llamando al método predeterminado de la actividad
+            requireActivity().onBackPressed()
+        }
     }
 
     override fun onCreateView(
@@ -48,8 +54,11 @@ class FragmentoCitas : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO
-
+        // Configurar el botón Atrás del teléfono para volver al FragmentoA
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            // Realizar la transacción de fragmento para ir al FragmentoA
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
 

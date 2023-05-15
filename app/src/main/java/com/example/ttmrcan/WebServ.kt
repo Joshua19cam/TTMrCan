@@ -26,6 +26,12 @@ interface WebServ {
         @Path("id_usuario") id_usuario: Int
     ): Response<MascotasResponse>
 
+    @GET("/mascota/historialM/{id_mascota}/{tipo_consulta}")
+    suspend fun obtenerHistorial(
+        @Path("id_mascota") id_mascota: Int,
+        @Path("tipo_consulta") tipo_consulta: String
+    ): Response<HistorialResponse>
+
     @GET("/usuarioLogin/{email_usuario}/{password_usuario}")
     suspend fun checarLogin(
         @Path("email_usuario") email_usuario: String,
@@ -60,6 +66,11 @@ interface WebServ {
         @Body mascota: Mascota
     ): Response<String>
 
+    @PUT("/mascota/darBaja/{id_mascota}")
+    suspend fun darBaja(
+        @Path("id_mascota") id_mascota: Int,
+        @Body baja_mascota: Mascota
+    ): Response<String>
 
 
 }

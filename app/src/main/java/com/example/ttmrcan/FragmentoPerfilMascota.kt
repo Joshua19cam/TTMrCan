@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ttmrcan.databinding.FragmentFragmentoListaMascotasBinding
@@ -68,7 +69,49 @@ class FragmentoPerfilMascota : Fragment() {
         binding.textViewInfo.setText("Nacimiento: ${fechaCortaMascota}\n\nRaza: " +
                 "${razaMascota}\n\nPadecimientos: ${padecimientosMascota}\n\nSexo: ${sexoMascota}")
 
+        val fragmentoHistorial = FragmentoHistorial()
+        val fragmentTransaction = requireFragmentManager().beginTransaction()
 
+        val args = Bundle()
+
+        args.putInt("id_mascota_HM", idMascota)
+        args.putString("tipo", "medica")
+
+        fragmentoHistorial.arguments = args
+        fragmentTransaction.replace(R.id.frameContainerHistorial, fragmentoHistorial)
+//        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+//        binding.btnHistorialMedico.setOnClickListener {
+//
+//            val fragmentoHistorialM = FragmentoHistorial()
+//            val fragmentTransactionM = requireFragmentManager().beginTransaction()
+//            val argsM = Bundle()
+//
+//            argsM.putInt("id_mascota_M", idMascota)
+//            argsM.putString("tipoM", "medica")
+//
+//            fragmentoHistorialM.arguments = args
+//            fragmentTransactionM.replace(R.id.frameContainerHistorial, fragmentoHistorial)
+//            fragmentTransactionM.addToBackStack(null)
+//            fragmentTransactionM.commit()
+//
+//        }
+//        binding.btnHistorialVacunacion.setOnClickListener {
+//
+//            val fragmentoHistorialV = FragmentoHistorial()
+//            val fragmentTransactionV = requireFragmentManager().beginTransaction()
+//            val argsV = Bundle()
+//
+//            argsV.putInt("id_mascota_V", idMascota)
+//            argsV.putString("tipoV", "vacunacion")
+//
+//            fragmentoHistorialV.arguments = args
+//            fragmentTransactionV.replace(R.id.frameContainerHistorial, fragmentoHistorial)
+//            fragmentTransactionV.addToBackStack(null)
+//            fragmentTransactionV.commit()
+//
+//        }
     }
 
     companion object {

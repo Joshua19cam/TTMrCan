@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
 class MascotaAdapter(
-    //var context: Context,
+    /*var context: Context,*/
     var listaMascotas: ArrayList<Mascota>
 ): RecyclerView.Adapter<MascotaAdapter.MascotaViewHolder>(){
 

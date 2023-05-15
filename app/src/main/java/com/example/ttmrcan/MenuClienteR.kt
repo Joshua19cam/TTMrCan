@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import com.example.ttmrcan.databinding.NavHeaderBinding
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 class MenuClienteR : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
-    lateinit var bindingNavH : NavHeaderBinding
+//    lateinit var bindingNavH : NavHeaderBinding
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +38,15 @@ class MenuClienteR : AppCompatActivity() {
         val valorCorreo = sharedPreferencesUsuario.getString("email",null)
 
         //TODO lo del nav header no puedo cambiarlo :(
-        val otroLayout = LayoutInflater.from(this@MenuClienteR).inflate(R.layout.nav_header, null)
+
+        /*val otroLayout = LayoutInflater.from(this@MenuClienteR).inflate(R.layout.nav_header, null)
         val navNombre= otroLayout.findViewById<TextView>(R.id.tvUserName)
         val navCorreo= otroLayout.findViewById<TextView>(R.id.tvUserEmail)
 
         navNombre.setText(valorNombre)
-        navCorreo.setText(valorCorreo)
+        navCorreo.setText(valorCorreo)*/
+
+        //
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -57,6 +61,16 @@ class MenuClienteR : AppCompatActivity() {
 
         val drawerLayout : DrawerLayout = findViewById(R.id.drawerLayout)
         val navView : NavigationView = findViewById(R.id.navigation_view)
+
+        //TODO Lo de nav header ejemplo
+
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+        val headerView = navigationView.getHeaderView(0)
+        val nameTextView = headerView.findViewById<TextView>(R.id.tvUserName)
+        val emailTextView = headerView.findViewById<TextView>(R.id.tvUserEmail)
+        nameTextView.text = valorNombre
+        emailTextView.text = valorCorreo
+
 
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
@@ -97,6 +111,31 @@ class MenuClienteR : AppCompatActivity() {
             true
         }
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, FragmentoListaMascotas())
+                .commit()
+        }
+
+    }
+
+    override fun onBackPressed() {
+        // Obtener el fragmento actual en la pila de fragmentos
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment is FragmentoCitas) {
+            // Reemplazar FragmentoB con FragmentoA en la pila de fragmentos al manejar el evento de retroceso
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FragmentoListaMascotas())
+                .commit()
+        }else if (currentFragment is FragmentoPerfilUsuario){
+            // Reemplazar FragmentoB con FragmentoA en la pila de fragmentos al manejar el evento de retroceso
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, FragmentoListaMascotas())
+                .commit()
+        } else {
+            // Manejar el evento de retroceso predeterminado si no estamos en FragmentoB
+            super.onBackPressed()
+        }
     }
 
     private fun replaceFragment(fragment: Fragment, title : String){

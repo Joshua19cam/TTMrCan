@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:gravity="center"
+    android:background="@drawable/borde_tabla_historial">
+
+
+    <TextView
+        android:id="@+id/tvHistorialFecha"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="AAAA-MM-DD"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/tvHistorialAplico"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Joshua Campos "
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/tvHistorialProducto"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Paracetamol con naproxeno"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/tvMasInfoHistorial"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text=" + Detalles"
+        android:textAlignment="viewStart" />
+
+
+</LinearLayout>

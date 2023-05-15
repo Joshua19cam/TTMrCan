@@ -1,12 +1,15 @@
 package com.example.ttmrcan
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.GridLayoutManager
@@ -57,7 +60,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
 
     lateinit var adaptador: MascotaAdapter
     var listaMascotas = arrayListOf<Mascota>()
-    lateinit var mascotaNueva : Mascota
+    var mascotaNueva = Mascota(-1,"","","","","","",0,"",0)
     private var backPressedTime = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -162,6 +165,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
 
     override fun borrarMascota(id: Int) {
         //agregar lo de dar de baja
+        mostrarDialogoBaja(id)
     }
 
     override fun verPerfil(mascota: Mascota) {
@@ -183,6 +187,40 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
+    private fun mostrarDialogoBaja(id: Int){
+        val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo?.setContentView(R.layout.dialogo_cambio_warning)
+        val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_warning_title)
+        val subtitulo = dialogo?.findViewById<TextView>(R.id.dialogo_warning_sub)
+        val btnSi = dialogo?.findViewById<Button>(R.id.buttonSi)
+        val btnNo = dialogo?.findViewById<Button>(R.id.buttonNo)
+        titulo?.text = "Dar de baja mascota"
+        subtitulo?.text = "¿Está seguro que desea dar de baja esta mascota?"
+        dialogo?.setCancelable(true)
+        dialogo?.show()
+        btnSi?.setOnClickListener {
+            mascotaNueva.baja_mascota = 1
+            CoroutineScope(Dispatchers.IO).launch {
+                val call = RetrofitClient.webServ.darBaja(id,mascotaNueva)
+                activity?.runOnUiThread{
+                    if(call.isSuccessful){
+                        Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            dialogo?.cancel()
 
+            val fragmentoListaMascotas = FragmentoListaMascotas()
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.fragment_container, fragmentoListaMascotas)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+        btnNo?.setOnClickListener {
+            dialogo?.cancel()
+        }
+    }
 
 }

@@ -1,16 +1,14 @@
 package com.example.ttmrcan
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
-import com.example.ttmrcan.databinding.FragmentFragmentoLoginBinding
-import com.example.ttmrcan.databinding.FragmentFragmentoPerfilUsuarioBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ttmrcan.databinding.FragmentFragmentoHistorialBinding
+import com.example.ttmrcan.databinding.FragmentFragmentoPerfilMascotaBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,15 +20,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [FragmentoPerfilUsuario.newInstance] factory method to
+ * Use the [FragmentoHistorial.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FragmentoPerfilUsuario : Fragment() {
+class FragmentoHistorial : Fragment(), HistorialAdapter.OnItemClicked{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var binding: FragmentFragmentoPerfilUsuarioBinding
+    private lateinit var binding: FragmentFragmentoHistorialBinding
     private lateinit var inflater: LayoutInflater
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +36,6 @@ class FragmentoPerfilUsuario : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-        }
-        // Permitir el manejo de eventos de retroceso en este fragmento
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // Manejar el evento de retroceso llamando al método predeterminado de la actividad
-            requireActivity().onBackPressed()
         }
     }
 
@@ -52,43 +45,62 @@ class FragmentoPerfilUsuario : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         this.inflater = inflater
-        this.binding = FragmentFragmentoPerfilUsuarioBinding.inflate(inflater, container, false)
+        this.binding = FragmentFragmentoHistorialBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
-    lateinit var usuario: Usuario
+    lateinit var adaptador: HistorialAdapter
+    var listaHistorial = arrayListOf<Historial>()
+    var historialNuevo = Historial(1,"","",
+        1,"","","","",1,1)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val idMascotaH = arguments?.getInt("id_mascota_HM")
+        val tipoH = arguments?.getString("tipo")
+
+        binding.recyclerViewHistorial.layoutManager = LinearLayoutManager(activity)
+        setupRecyclerView()
+
+        if (tipoH == "medica"){
+
+            obtenerHistorial(idMascotaH!!,"medica")
+
+        }else if (tipoH == "vacunacion"){
+
+            obtenerHistorial(idMascotaH!!,"vacunacion")
+        }
+
+        //obtenerHistorial(4,"medica")
+
+
         //TODO
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
-
-        mostrarPerfilNR(valorObtenidoEmail.toString())
-
 
     }
 
-    @SuppressLint("SetTextI18n")
-    fun mostrarPerfilNR(email : String){
-
+    fun obtenerHistorial(id: Int,tipo: String){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.obtenerIdUsuario(email)
+            val call = RetrofitClient.webServ.obtenerHistorial(id,tipo)
             activity?.runOnUiThread{
                 if(call.isSuccessful){
-                    usuario = call.body()!!
-                    binding.textViewInfoP.setText(
-                        "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
-                    )
-                    binding.textViewInfoCitas.setText("Citas estéticas: 0\nCitas médicas: 0\nCitas vacunación: 0")
+                    listaHistorial = call.body()!!.listaHistorialM
+                    setupRecyclerView()
                 }else{
-                    Toast.makeText(activity,"Error al consultar usuario", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"No hay un historial aún", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
+    fun setupRecyclerView() {
+        adaptador = HistorialAdapter(listaHistorial)
+        adaptador.setOnClick(this@FragmentoHistorial)
+        binding.recyclerViewHistorial.adapter = adaptador
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -96,16 +108,20 @@ class FragmentoPerfilUsuario : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentoPerfilUsuario.
+         * @return A new instance of fragment FragmentoHistorial.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            FragmentoPerfilUsuario().apply {
+            FragmentoHistorial().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun masInfo(historial: Historial) {
+
     }
 }

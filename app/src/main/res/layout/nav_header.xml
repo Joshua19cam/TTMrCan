@@ -27,9 +27,9 @@
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jesus Palafox"
+            android:text="Usuario"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="14dp"
             android:textStyle="bold" />
 
         <TextView
@@ -37,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="abcd1234@gmail.com"
-            android:textSize="16dp" />
+            android:text="ejemplo@gmail.com"
+            android:textSize="12dp" />
 
     </LinearLayout>
 
