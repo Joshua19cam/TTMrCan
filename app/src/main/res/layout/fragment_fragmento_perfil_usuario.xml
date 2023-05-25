@@ -26,14 +26,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="359dp"
-        android:layout_height="0dp"
+        android:layout_width="360dp"
+        android:layout_height="150dp"
         android:layout_marginTop="236dp"
-        android:layout_marginBottom="45dp"
         android:background="@drawable/linea_punteada"
         android:gravity="center"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/lottieAnimationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,8 +40,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView8"
@@ -56,11 +53,11 @@
 
             <TextView
                 android:id="@+id/textViewInfoP"
-                android:layout_width="wrap_content"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/manrope_medium"
-                android:text="Jesus Palafox Sanchez \n (123)-456-7890 \n jesuspalafoxsanchez@gmail.com"
+                android:text="Usuario\n(123)-456-7890\nejemplo@gmail.com"
                 android:textAlignment="viewStart"
                 android:textSize="17sp" />
         </LinearLayout>
@@ -79,24 +76,9 @@
 
     </LinearLayout>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
-        android:layout_width="185dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/doglove"
-        tools:ignore="MissingConstraints" />
-
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="359dp"
+        android:layout_width="360dp"
         android:layout_height="165dp"
         android:layout_marginTop="36dp"
         android:background="@drawable/linea_punteada"
@@ -107,18 +89,43 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:ignore="MissingConstraints">
 
-
-        <TextView
-            android:id="@+id/textViewInfoCitas"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="7dp"
-            android:fontFamily="@font/manrope_semibold"
-            android:text="Citas estéticas: 0 \n Citas médicas: 0 \n Citas vacunación: 0"
-            android:textSize="17sp" />
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/textViewInfoCitas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="7dp"
+                android:fontFamily="@font/manrope_semibold"
+                android:text="Citas estéticas: 0\nCitas médicas: 0\nCitas vacunación: 0"
+                android:textSize="17sp" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/doglove"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="244dp"
+                tools:layout_editor_absoluteY="615dp" />
+
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

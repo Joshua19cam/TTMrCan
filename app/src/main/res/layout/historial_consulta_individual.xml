@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="AAAA-MM-DD"
-        android:textAlignment="viewStart" />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvHistorialAplico"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Joshua Campos "
-        android:textAlignment="viewStart" />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvHistorialProducto"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Paracetamol con naproxeno"
-        android:textAlignment="viewStart" />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/tvMasInfoHistorial"
@@ -40,7 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text=" + Detalles"
-        android:textAlignment="viewStart" />
+        android:textAlignment="center"
+        android:textColor="#2196F3" />
 
 
 </LinearLayout>

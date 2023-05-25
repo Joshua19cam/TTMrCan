@@ -5,6 +5,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -12,6 +14,9 @@ import retrofit2.http.Path
 
 object AppConstantes{
     const val  BASE_URL = "http://192.168.100.78:4000"
+    //pala : http://192.168.0.123:3000
+    //joshua : 192.168.100.78
+    //omar: 192.168.0.120
 }
 
 interface WebServ {
@@ -20,6 +25,11 @@ interface WebServ {
     suspend fun obtenerIdUsuario(
         @Path("email_usuario") email_usuario: String?
     ): Response<Usuario>
+
+    @GET("/usuario/consultas/{id_usuario}")
+    suspend fun obtenerConsultas(
+        @Path("id_usuario") id_usuario: Int
+    ): Response<TotalConsultas>
 
     @GET("/mascotas/{id_usuario}")
     suspend fun obtenerMascotasUsuario(

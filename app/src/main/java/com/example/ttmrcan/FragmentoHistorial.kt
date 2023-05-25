@@ -1,14 +1,15 @@
 package com.example.ttmrcan
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ttmrcan.databinding.FragmentFragmentoHistorialBinding
-import com.example.ttmrcan.databinding.FragmentFragmentoPerfilMascotaBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,30 +54,18 @@ class FragmentoHistorial : Fragment(), HistorialAdapter.OnItemClicked{
     lateinit var adaptador: HistorialAdapter
     var listaHistorial = arrayListOf<Historial>()
     var historialNuevo = Historial(1,"","",
-        1,"","","","",1,1)
+        1,"","","","",1,1,1)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val idMascotaH = arguments?.getInt("id_mascota_HM")
-        val tipoH = arguments?.getString("tipo")
+        val tipoMascotaH = arguments?.getString("tipo_mascota_HM")
 
         binding.recyclerViewHistorial.layoutManager = LinearLayoutManager(activity)
         setupRecyclerView()
 
-        if (tipoH == "medica"){
-
-            obtenerHistorial(idMascotaH!!,"medica")
-
-        }else if (tipoH == "vacunacion"){
-
-            obtenerHistorial(idMascotaH!!,"vacunacion")
-        }
-
-        //obtenerHistorial(4,"medica")
-
-
-        //TODO
+        obtenerHistorial(idMascotaH!!,tipoMascotaH!!)
 
     }
 
@@ -123,5 +112,15 @@ class FragmentoHistorial : Fragment(), HistorialAdapter.OnItemClicked{
 
     override fun masInfo(historial: Historial) {
 
+        val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo?.setContentView(R.layout.dialogo_detalles_historial)
+        val peso = dialogo?.findViewById<TextView>(R.id.dialogo_peso_text)
+        val descripcion = dialogo?.findViewById<TextView>(R.id.dialogo_descipcion_text)
+        val observaciones = dialogo?.findViewById<TextView>(R.id.dialogo_observaciones_text)
+        peso?.text = historial.peso_consulta.toString()
+        descripcion?.text = historial.descripcion_consulta
+        observaciones?.text = historial.observaciones_consulta
+        dialogo?.setCancelable(true)
+        dialogo?.show()
     }
 }

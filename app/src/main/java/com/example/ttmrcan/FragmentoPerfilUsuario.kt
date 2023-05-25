@@ -58,6 +58,7 @@ class FragmentoPerfilUsuario : Fragment() {
     }
 
     lateinit var usuario: Usuario
+    lateinit var consultas: TotalConsultas
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,24 +66,27 @@ class FragmentoPerfilUsuario : Fragment() {
         //TODO
         val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
+        val valorObtenidoId = sharedPreferencesUsuario.getInt("id",0)
 
-        mostrarPerfilNR(valorObtenidoEmail.toString())
-
+        mostrarPerfilNR(valorObtenidoEmail.toString(),valorObtenidoId)
 
     }
 
+
     @SuppressLint("SetTextI18n")
-    fun mostrarPerfilNR(email : String){
+    fun mostrarPerfilNR(email : String,id : Int){
 
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerIdUsuario(email)
+            val call2 = RetrofitClient.webServ.obtenerConsultas(id)
             activity?.runOnUiThread{
-                if(call.isSuccessful){
+                if(call.isSuccessful || call2.isSuccessful){
                     usuario = call.body()!!
+                    consultas = call2.body()!!
                     binding.textViewInfoP.setText(
                         "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
                     )
-                    binding.textViewInfoCitas.setText("Citas estéticas: 0\nCitas médicas: 0\nCitas vacunación: 0")
+                    binding.textViewInfoCitas.setText("Citas estéticas: ${consultas.consulta_esteticas}\nCitas médicas: ${consultas.consulta_medicas}\nCitas vacunación: ${consultas.consulta_vacunacion}")
                 }else{
                     Toast.makeText(activity,"Error al consultar usuario", Toast.LENGTH_SHORT).show()
                 }

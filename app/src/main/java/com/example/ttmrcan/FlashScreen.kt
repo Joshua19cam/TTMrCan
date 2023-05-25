@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 
@@ -18,6 +19,7 @@ class FlashScreen : AppCompatActivity() {
     }
 
     private fun startTimer(){
+
         object: CountDownTimer(3000, 1000){
             override fun onTick(p0: Long) {
             }

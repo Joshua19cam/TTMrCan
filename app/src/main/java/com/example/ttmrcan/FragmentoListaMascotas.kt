@@ -3,7 +3,6 @@ package com.example.ttmrcan
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +13,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.ttmrcan.databinding.FragmentFragmentoAgregarMascotaBinding
-import com.example.ttmrcan.databinding.FragmentFragmentoEditarMascotaBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoListaMascotasBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +57,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
 
     lateinit var adaptador: MascotaAdapter
     var listaMascotas = arrayListOf<Mascota>()
-    var mascotaNueva = Mascota(-1,"","","","","","",0,"",0)
+    var mascotaNueva = Mascota(-1,"","","","","","","",0,"",0)
     private var backPressedTime = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,7 +92,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
             override fun handleOnBackPressed() {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - backPressedTime < 2000) {
-                    requireActivity().finish()
+                    requireActivity().finishAffinity()
                 } else {
                     backPressedTime = currentTime
                     Toast.makeText(requireContext(), "Presiona de nuevo para salir", Toast.LENGTH_SHORT).show()
@@ -119,7 +116,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
     }
 
     fun setupRecyclerView() {
-        adaptador = MascotaAdapter(listaMascotas)
+        adaptador = MascotaAdapter(this,listaMascotas)
         adaptador.setOnClick(this@FragmentoListaMascotas)
         binding.recyclerViewMascotas.adapter = adaptador
     }
@@ -154,10 +151,17 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         args.putString("color_mascota", mascota.color_mascota)
         args.putString("raza_mascota", mascota.raza_mascota)
         args.putString("fecha_nacimiento_mascota", mascota.fecha_nacimiento_mascota)
+        args.putString("foto_mascota", mascota.foto_mascota)
 
         fragmentoEditarMascota.arguments = args
 
         val fragmentTransaction = requireFragmentManager().beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
         fragmentTransaction.replace(R.id.fragment_container, fragmentoEditarMascota)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
@@ -169,6 +173,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
     }
 
     override fun verPerfil(mascota: Mascota) {
+
         val fragmentoVerPerfil = FragmentoPerfilMascota()
         val args = Bundle()
 
@@ -179,10 +184,17 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         args.putString("sexo_mascota",mascota.sexo_mascota)
         args.putString("padecimientos_mascota",mascota.padecimientos_mascota)
         args.putString("fecha_nacimiento_mascota", mascota.fecha_nacimiento_mascota)
+        args.putString("foto_mascota", mascota.foto_mascota)
 
         fragmentoVerPerfil.arguments = args
 
         val fragmentTransaction = requireFragmentManager().beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
         fragmentTransaction.replace(R.id.fragment_container, fragmentoVerPerfil)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()

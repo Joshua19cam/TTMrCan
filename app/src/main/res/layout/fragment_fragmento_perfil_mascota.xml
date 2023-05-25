@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,11 +8,25 @@
 
 
     <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="DATOS"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textViewInfo"
         android:layout_width="209dp"
         android:layout_height="155dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/datos_gris"
         android:elevation="5dp"
         android:fontFamily="@font/nunito"
@@ -21,15 +35,18 @@
         android:text="Nacimiento: 00/00/0000\n\nRaza: Ejemplo\n\nPadecimientos: Ninguno\n\nSexo: No binario"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         tools:ignore="MissingConstraints,RtlSymmetry,TextSizeCheck" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/shapeableImageView2"
+        android:id="@+id/shapeableImageViewFotoMascota"
         android:layout_width="155dp"
         android:layout_height="155dp"
         android:layout_margin="5dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         android:adjustViewBounds="true"
         android:elevation="10dp"
         android:scaleType="fitCenter"
@@ -42,7 +59,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textViewNombre"
+        android:id="@+id/tvNombrePerfil"
         android:layout_width="118dp"
         android:layout_height="36dp"
         android:background="@drawable/datos_perfil_blanco"
@@ -52,135 +69,120 @@
         android:text="NOMBRE"
         android:textAlignment="center"
         android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView2"
-        app:layout_constraintEnd_toEndOf="@+id/shapeableImageView2"
+        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageViewFotoMascota"
+        app:layout_constraintEnd_toEndOf="@+id/shapeableImageViewFotoMascota"
         app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
-        app:layout_constraintTop_toTopOf="@+id/shapeableImageView2"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageViewFotoMascota"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageViewFotoMascota"
         app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/textView5"
+
+    <Button
+        android:id="@+id/btnHistorialVacunacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/nunito_bold"
-        android:text="DATOS"
-        android:textColor="#000000"
-        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="#f5f4f7"
+        android:minHeight="48dp"
+        android:text="Historial de Vacunación"
+        android:textAllCaps="false"
+        android:textColor="#45474a"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnHistorialMedico"
+        app:layout_constraintTop_toBottomOf="@+id/textViewInfo" />
+
+    <Button
+        android:id="@+id/btnHistorialMedico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:backgroundTint="#f5f4f7"
+        android:minHeight="48dp"
+        android:text="Historial Médico"
+        android:textAllCaps="false"
+        android:textColor="#45474a"
+        app:layout_constraintBottom_toBottomOf="@+id/btnHistorialVacunacion"
+        app:layout_constraintEnd_toStartOf="@+id/btnHistorialVacunacion"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnHistorialVacunacion"
+        app:layout_constraintVertical_bias="0.444" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="60dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/frameContainerHistorial"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnHistorialVacunacion"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints">
 
-        android:orientation="vertical">
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="400dp"
-            android:layout_height="68dp"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shapeableImageView2"
-            tools:ignore="MissingConstraints">
-
-            <Button
-                android:id="@+id/btnHistorialMedico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#f5f4f7"
-                android:minHeight="48dp"
-                android:text="Historial Médico"
-                android:textAllCaps="false"
-                android:textColor="#45474a" />
-
-            <Button
-                android:id="@+id/btnHistorialVacunacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#f5f4f7"
-                android:minHeight="48dp"
-                android:text="Historial de Vacunación"
-                android:textAllCaps="false"
-                android:textColor="#45474a" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="400dp"
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:padding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.545"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
-            tools:ignore="MissingConstraints">
+            android:layout_weight="1"
+            android:text="Fecha"
+            android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Fecha"
-                android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Quien aplico"
+            android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Quien aplico"
-                android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Producto"
+            android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Producto"
-                android:textAlignment="center" />
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Más Info"
+            android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Más Info"
-                android:textAlignment="center" />
-        </LinearLayout>
 
     </LinearLayout>
 
-
-
     <FrameLayout
         android:id="@+id/frameContainerHistorial"
-        android:layout_width="400dp"
-        android:layout_height="365dp"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
     <!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recyclerViewHistorial"-->
-<!--        android:layout_width="399dp"-->
-<!--        android:layout_height="380dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:listitem="@layout/historial_consulta_individual" />-->
+    <!--        android:id="@+id/recyclerViewHistorial"-->
+    <!--        android:layout_width="399dp"-->
+    <!--        android:layout_height="380dp"-->
+    <!--        android:layout_marginBottom="16dp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        tools:listitem="@layout/historial_consulta_individual" />-->
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

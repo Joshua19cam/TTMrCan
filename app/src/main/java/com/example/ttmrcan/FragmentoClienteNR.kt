@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.ttmrcan.databinding.FragmentFragmentoClienteNRBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,7 @@ class FragmentoClienteNR : Fragment() {
     //Aqui se realiza toda la programacion del fragment
 
     lateinit var usuarioNR: Usuario
+    private var backPressedTime = 0L
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Se manda llamar las variables guardadas en SharedPreferences guardadas anteriormente
@@ -63,6 +65,32 @@ class FragmentoClienteNR : Fragment() {
 
         // Función que se encarga de llamar al metodo para obtener los datos del correo ingresado
         mostrarPerfilNR(valorObtenidoEmail.toString())
+
+        binding.btnCerrarSesion.setOnClickListener {
+            // Al presionar el botón cerrar sesión se deben eliminar los datos amacenados en Sharedpreferences
+            val sharedPreferences = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+            sharedPreferences.edit().clear().apply()
+            val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+            sharedPreferencesUsuario.edit().clear().apply()
+            val fragmentoLogin = FragmentoLogin()
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            fragmentTransaction.replace(R.id.frameContainerLogin, fragmentoLogin)
+            fragmentTransaction.commit()
+
+        }
+
+        //Esto es para que se salga de la app estando en el fragment login
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - backPressedTime < 2000) {
+                    requireActivity().finish()
+                } else {
+                    backPressedTime = currentTime
+                    Toast.makeText(requireContext(), "Presiona de nuevo para salir", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
     }
 
@@ -79,10 +107,7 @@ class FragmentoClienteNR : Fragment() {
                         "${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}"
                     )
                     binding.textViewInfoDatos.setText(
-                        "Información personal:" +
-                                "\n ${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}"+
-                                "\n ${usuarioNR.telefono_usuario}"+
-                                "\n ${usuarioNR.email_usuario}")
+                        "Información personal:\n${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}\n${usuarioNR.telefono_usuario}\n${usuarioNR.email_usuario}")
                 }else{
                     Toast.makeText(activity,"Error al consultar usuario",Toast.LENGTH_SHORT).show()
                 }

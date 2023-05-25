@@ -5,11 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.ttmrcan.databinding.FragmentFragmentoListaMascotasBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoPerfilMascotaBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,7 +54,7 @@ class FragmentoPerfilMascota : Fragment() {
     }
 
     var mascota = Mascota(-1,"","","","",
-        "","",0,"",-1)
+        "","","",0,"",-1)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,58 +66,62 @@ class FragmentoPerfilMascota : Fragment() {
         val colorMascota = arguments?.getString("color_mascota")
         val razaMascota = arguments?.getString("raza_mascota")
         val fechaMascota = arguments?.getString("fecha_nacimiento_mascota")
-        val fechaCortaMascota = fechaMascota?.substring(0,10)
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(fechaMascota)
+        val fechaFormateada = sdf.format(date)
+
+        val fotoMascota = arguments?.getString("foto_mascota")
         val sexoMascota = arguments?.getString("sexo_mascota")
         val padecimientosMascota = arguments?.getString("padecimientos_mascota")
 
-        binding.textViewNombre.setText(nombreMascota)
-        binding.textViewInfo.setText("Nacimiento: ${fechaCortaMascota}\n\nRaza: " +
+        if (fotoMascota!!.isNotEmpty()) {
+            val uniqueId = System.currentTimeMillis().toString()
+            Glide.with(this).load(fotoMascota).signature(ObjectKey(uniqueId)).into(binding.shapeableImageViewFotoMascota)
+        }
+
+
+        binding.tvNombrePerfil.setText(nombreMascota)
+        binding.textViewInfo.setText("Nacimiento: ${fechaFormateada}\n\nRaza: " +
                 "${razaMascota}\n\nPadecimientos: ${padecimientosMascota}\n\nSexo: ${sexoMascota}")
 
+        mostrarHistorialMedico()
+
+        binding.btnHistorialMedico.setOnClickListener {
+            mostrarHistorialMedico()
+        }
+        binding.btnHistorialVacunacion.setOnClickListener {
+            mostrarHistorialVacunacion()
+        }
+    }
+
+    fun mostrarHistorialMedico(){
         val fragmentoHistorial = FragmentoHistorial()
         val fragmentTransaction = requireFragmentManager().beginTransaction()
 
         val args = Bundle()
 
-        args.putInt("id_mascota_HM", idMascota)
-        args.putString("tipo", "medica")
+        args.putInt("id_mascota_HM", mascota.id_mascota)
+        args.putString("tipo_mascota_HM", "Medica")
 
         fragmentoHistorial.arguments = args
         fragmentTransaction.replace(R.id.frameContainerHistorial, fragmentoHistorial)
-//        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
-
-//        binding.btnHistorialMedico.setOnClickListener {
-//
-//            val fragmentoHistorialM = FragmentoHistorial()
-//            val fragmentTransactionM = requireFragmentManager().beginTransaction()
-//            val argsM = Bundle()
-//
-//            argsM.putInt("id_mascota_M", idMascota)
-//            argsM.putString("tipoM", "medica")
-//
-//            fragmentoHistorialM.arguments = args
-//            fragmentTransactionM.replace(R.id.frameContainerHistorial, fragmentoHistorial)
-//            fragmentTransactionM.addToBackStack(null)
-//            fragmentTransactionM.commit()
-//
-//        }
-//        binding.btnHistorialVacunacion.setOnClickListener {
-//
-//            val fragmentoHistorialV = FragmentoHistorial()
-//            val fragmentTransactionV = requireFragmentManager().beginTransaction()
-//            val argsV = Bundle()
-//
-//            argsV.putInt("id_mascota_V", idMascota)
-//            argsV.putString("tipoV", "vacunacion")
-//
-//            fragmentoHistorialV.arguments = args
-//            fragmentTransactionV.replace(R.id.frameContainerHistorial, fragmentoHistorial)
-//            fragmentTransactionV.addToBackStack(null)
-//            fragmentTransactionV.commit()
-//
-//        }
     }
+    fun mostrarHistorialVacunacion(){
+        val fragmentoHistorial = FragmentoHistorial()
+        val fragmentTransaction = requireFragmentManager().beginTransaction()
+
+        val args = Bundle()
+
+        args.putInt("id_mascota_HM", mascota.id_mascota)
+        args.putString("tipo_mascota_HM", "Vacunacion")
+
+        fragmentoHistorial.arguments = args
+        fragmentTransaction.replace(R.id.frameContainerHistorial, fragmentoHistorial)
+        fragmentTransaction.commit()
+    }
+
 
     companion object {
         /**

@@ -1,19 +1,32 @@
 package com.example.ttmrcan
 
+import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.ttmrcan.databinding.FragmentFragmentoEditarMascotaBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +45,9 @@ class FragmentoEditarMascota : Fragment() {
 
     private lateinit var binding: FragmentFragmentoEditarMascotaBinding
     private lateinit var inflater: LayoutInflater
+
+    private val PICK_IMAGE_REQUEST = 1
+    private var selectedImage: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,33 +69,52 @@ class FragmentoEditarMascota : Fragment() {
     }
 
     var mascota = Mascota(-1,"","","","",
-         "","",0,"",-1)
+         "","","",0,"",-1)
     var isEditando = false
+    var imageMascota64 = ""
+    lateinit var viewModel: MainViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         val idMascota = arguments?.getInt("id_mascota")
         mascota.id_mascota = idMascota!!
         val nombreMascota = arguments?.getString("nombre_mascota")
         val colorMascota = arguments?.getString("color_mascota")
         val razaMascota = arguments?.getString("raza_mascota")
-
         val fechaMascota = arguments?.getString("fecha_nacimiento_mascota")
-        val fechaCortaMascota = fechaMascota?.substring(0,10)
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(fechaMascota)
+        val fechaFormateada = sdf.format(date)
+
+        val fotoMascota = arguments?.getString("foto_mascota")
+        mascota.foto_mascota = fotoMascota.toString()
 
         binding.editNombreMascotaE.setText(nombreMascota)
         binding.editColorMascotaE.setText(colorMascota)
         binding.editRazaMascotaE.setText(razaMascota)
-        binding.editFechaMascotaE.setText(fechaCortaMascota)
+        binding.editFechaMascotaE.setText(fechaFormateada)
 
-        //Toast.makeText(activity,"ID: ${mascota.id_mascota}", Toast.LENGTH_LONG).show()
+        val uniqueId = System.currentTimeMillis().toString()
+        Glide.with(this).load(fotoMascota).signature(ObjectKey(uniqueId)).into(binding.imageView2)
+
+        binding.editFechaMascotaE.setOnClickListener{
+            showDatePickerDialog()
+        }
+
+        binding.buttonEditarImagen.setOnClickListener {
+            openGallery()
+        }
 
         binding.buttonGuardarEditar.setOnClickListener {
             val isValido = validarCampos()
             if(isValido){
                 if(!isEditando){
                     actualizarMascota()
+                    mandarimagen()
                 }
             }
         }
@@ -89,19 +124,90 @@ class FragmentoEditarMascota : Fragment() {
         }
 
     }
+
+    fun mandarimagen(){
+
+        val pattern = Regex("""/([A-Za-z0-9]+)\.png$""")
+        val matchResult = pattern.find(mascota.foto_mascota)
+
+        val nombre = matchResult?.groupValues?.get(1)
+
+        val imagen = ImageModel(System.currentTimeMillis().toString(),nombre.toString(),imageMascota64)
+        viewModel.enviarFoto(imagen)
+
+    }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri = data.data!!
+            try {
+                val inputStream = requireActivity().contentResolver.openInputStream(imageUri)
+                selectedImage = BitmapFactory.decodeStream(inputStream)
+                inputStream?.close()
+                imageMascota64 = encodeImageToBase64(selectedImage)
+                Toast.makeText(activity,"Tu imagen ya está seleccionada",Toast.LENGTH_SHORT).show()
+                // Aquí tienes tu imagen en base64 en la variable base64Image
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun encodeImageToBase64(image: Bitmap?): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        image?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val imageBytes = byteArrayOutputStream.toByteArray()
+
+        if (imageBytes != null) {
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+        } else {
+            return ""
+        }
+    }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val locale = Locale("es")
+        Locale.setDefault(locale)
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
+            val selectedDate = String.format(locale,"%02d/%02d/%04d", dayOfMonth, month + 1, year)
+            binding.editFechaMascotaE.setText(selectedDate)
+        }, year, month, dayOfMonth)
+
+        datePickerDialog.show()
+    }
     fun actualizarMascota() {
 
         this.mascota.nombre_mascota = binding.editNombreMascotaE.text.toString()
         this.mascota.color_mascota = binding.editColorMascotaE.text.toString()
         this.mascota.raza_mascota = binding.editRazaMascotaE.text.toString()
-        this.mascota.fecha_nacimiento_mascota = binding.editFechaMascotaE.text.toString()
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(binding.editFechaMascotaE.text.toString())
+        val fechaFormateada = sdf.format(date)
+
+        this.mascota.fecha_nacimiento_mascota = fechaFormateada
 
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.actualizarMascota(mascota.id_mascota, mascota)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
                     Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
-                    mostrarDialogo()
+                    //mostrarDialogo()
                     requireActivity().onBackPressed()
 
                 }else{
@@ -116,7 +222,7 @@ class FragmentoEditarMascota : Fragment() {
                 ||binding.editRazaMascotaE.text.isNullOrEmpty()||binding.editFechaMascotaE.text.isNullOrEmpty())
     }
 
-    private fun mostrarDialogo() {
+    /*private fun mostrarDialogo() {
         val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
         dialogo?.setContentView(R.layout.dialogo_cambio_exitoso)
         val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_correcto)
@@ -126,7 +232,7 @@ class FragmentoEditarMascota : Fragment() {
         Handler().postDelayed({
             dialogo?.dismiss()
         }, 5000)
-    }
+    }*/
 
     companion object {
         /**

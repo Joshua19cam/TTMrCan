@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialogo_warning_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:text="+ Detalles de la consulta"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            tools:ignore="RtlHardcoded" />
+
+
+        <TextView
+            android:id="@+id/dialogo_peso"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="1dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Peso:"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/dialogo_peso_text"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="1dp"
+            android:fontFamily="@font/nunito_extralight"
+            android:text="14 Kg"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/dialogo_descipcion"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="1dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Descripción:"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/dialogo_descipcion_text"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="1dp"
+            android:fontFamily="@font/nunito_extralight"
+            android:text="Cojera en la pata trasera derecha, dificultad para apoyar el peso en la extremidad afectada, ligera inflamación en la articulación."
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/dialogo_observaciones"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Observaciones:"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:id="@+id/dialogo_observaciones_text"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="18dp"
+            android:fontFamily="@font/nunito_extralight"
+            android:text="Basado en los síntomas y los hallazgos del examen físico, se sospecha de una posible lesión en la pata trasera derecha, como una distensión muscular o una torcedura."
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

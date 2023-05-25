@@ -1,20 +1,35 @@
 package com.example.ttmrcan
 
+import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.isEmpty
 import com.example.ttmrcan.databinding.ActivityRegistroClienteBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoAgregarMascotaBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import android.util.Base64
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import java.time.LocalTime
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +48,9 @@ class FragmentoAgregarMascota : Fragment() {
 
     private lateinit var binding: FragmentFragmentoAgregarMascotaBinding
     private lateinit var inflater: LayoutInflater
+
+    private val PICK_IMAGE_REQUEST = 1
+    private var selectedImage: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +74,16 @@ class FragmentoAgregarMascota : Fragment() {
 
 
     var mascota = Mascota(1,"","","",
-        "","","",0,"",-1)
+        "","","","",0,"",-1)
     //var usuarioID = 6
     var isEditando = false
+    var imageMascota64 = ""
+    lateinit var viewModel: MainViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
@@ -75,22 +97,135 @@ class FragmentoAgregarMascota : Fragment() {
             if(isValido){
                 if(!isEditando){
                     agregarMascota(valorUsuarioId)
+                    mandarimagen()
+                    val fragmentTransaction = requireFragmentManager().beginTransaction()
+                    fragmentTransaction.setCustomAnimations(
+                        R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+                        R.anim.exit_left, // salida para el fragmento actual
+                        R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+                        R.anim.exit_rigth // salida para el fragmento actualizado
+                    )
+                    fragmentTransaction.replace(R.id.fragment_container, FragmentoListaMascotas())
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
                 }
+            }
+        }
+
+        //Spinner de sexo para la mascota
+
+        val genderOptions = arrayOf("macho", "hembra")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genderOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.sexoSpinner.adapter = adapter
+
+        binding.sexoSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                mascota.sexo_mascota = genderOptions[position]
+                // Aquí puedes guardar la selección en una variable o hacer lo que desees con ella
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Opcional: si deseas realizar alguna acción cuando no se selecciona nada
+            }
+        }
+
+        binding.editFechaMascotaA.setOnClickListener{
+            showDatePickerDialog()
+        }
+
+        binding.imagenMascota.setOnClickListener {
+            openGallery()
+        }
+
+    }
+
+    fun mandarimagen(){
+
+        val dateFormat = SimpleDateFormat("HHmmss")
+        val dateFormatD = SimpleDateFormat("ddMMyyyy")
+        val fechaActual = Date()
+        val fechaFormateada = dateFormatD.format(fechaActual)
+        val horaActual = dateFormat.format(Date()).substring(0,6)
+
+        val nombre = mascota.nombre_mascota.trim()+fechaFormateada+horaActual
+        mascota.foto_mascota = "http://192.168.100.78/upload_image/img/$nombre.png"
+        val imagen = ImageModel(System.currentTimeMillis().toString(),nombre.trim(),imageMascota64)
+        viewModel.enviarFoto(imagen)
+
+    }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri = data.data!!
+            try {
+                val inputStream = requireActivity().contentResolver.openInputStream(imageUri)
+                selectedImage = BitmapFactory.decodeStream(inputStream)
+                inputStream?.close()
+                imageMascota64 = encodeImageToBase64(selectedImage)
+                Toast.makeText(activity,"Tu imagen ya está seleccionada",Toast.LENGTH_SHORT).show()
+                // Aquí tienes tu imagen en base64 en la variable base64Image
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }
     }
 
+    private fun encodeImageToBase64(image: Bitmap?): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        image?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val imageBytes = byteArrayOutputStream.toByteArray()
+
+        if (imageBytes != null) {
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+        } else {
+            return ""
+        }
+    }
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val locale = Locale("es")
+        Locale.setDefault(locale)
+
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
+            val selectedDate = String.format(locale,"%02d/%02d/%04d", dayOfMonth, month + 1, year)
+            binding.editFechaMascotaA.setText(selectedDate)
+        }, year, month, dayOfMonth)
+
+        datePickerDialog.show()
+    }
+
     fun validarCampos(): Boolean{
-        return !(binding.editNombreMascotaA.text.isNullOrEmpty()||binding.editSexoMascotaA.text.isNullOrEmpty()
+        return !(binding.editNombreMascotaA.text.isNullOrEmpty()||binding.sexoSpinner.isEmpty()
                 ||binding.editColorMascotaA.text.isNullOrEmpty()||binding.editRazaMascotaA.text.isNullOrEmpty()
                 ||binding.editFechaMascotaA.text.isNullOrEmpty())
     }
     fun agregarMascota(idUsuario: Int){
         this.mascota.nombre_mascota = binding.editNombreMascotaA.text.toString()
-        this.mascota.sexo_mascota = binding.editSexoMascotaA.text.toString()
+//        this.mascota.sexo_mascota = binding.editSexoMascotaA.text.toString()
         this.mascota.color_mascota = binding.editColorMascotaA.text.toString()
         this.mascota.raza_mascota = binding.editRazaMascotaA.text.toString()
-        this.mascota.fecha_nacimiento_mascota = binding.editFechaMascotaA.text.toString()
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(binding.editFechaMascotaA.text.toString())
+        val fechaFormateada = sdf.format(date)
+
+        this.mascota.fecha_nacimiento_mascota = fechaFormateada
         this.mascota.id_usuario = idUsuario
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -109,10 +244,11 @@ class FragmentoAgregarMascota : Fragment() {
 
     fun limpiarCampos(){
         binding.editNombreMascotaA.setText("")
-        binding.editSexoMascotaA.setText("")
+//        binding.editSexoMascotaA.setText("")
         binding.editColorMascotaA.setText("")
         binding.editRazaMascotaA.setText("")
         binding.editFechaMascotaA.setText("")
+
     }
 
     fun limpiarObjeto(){
@@ -124,6 +260,7 @@ class FragmentoAgregarMascota : Fragment() {
         this.mascota.especie_mascota = ""
         this.mascota.fecha_nacimiento_mascota = ""
         this.mascota.sexo_mascota = ""
+        this.mascota.foto_mascota = ""
         this.mascota.id_usuario = -1
     }
 

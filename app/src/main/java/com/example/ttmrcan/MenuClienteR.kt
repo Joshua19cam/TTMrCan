@@ -13,7 +13,6 @@ import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
@@ -37,16 +36,6 @@ class MenuClienteR : AppCompatActivity() {
         val valorNombre = sharedPreferencesUsuario.getString("nombreCompleto",null)
         val valorCorreo = sharedPreferencesUsuario.getString("email",null)
 
-        //TODO lo del nav header no puedo cambiarlo :(
-
-        /*val otroLayout = LayoutInflater.from(this@MenuClienteR).inflate(R.layout.nav_header, null)
-        val navNombre= otroLayout.findViewById<TextView>(R.id.tvUserName)
-        val navCorreo= otroLayout.findViewById<TextView>(R.id.tvUserEmail)
-
-        navNombre.setText(valorNombre)
-        navCorreo.setText(valorCorreo)*/
-
-        //
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -111,11 +100,11 @@ class MenuClienteR : AppCompatActivity() {
             true
         }
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, FragmentoListaMascotas())
-                .commit()
-        }
+//        if (savedInstanceState == null) {
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.fragment_container, FragmentoListaMascotas())
+//                .commit()
+//        }
 
     }
 
@@ -132,7 +121,8 @@ class MenuClienteR : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, FragmentoListaMascotas())
                 .commit()
-        } else {
+        }
+        else {
             // Manejar el evento de retroceso predeterminado si no estamos en FragmentoB
             super.onBackPressed()
         }

@@ -1,17 +1,17 @@
 package com.example.ttmrcan
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HistorialAdapter(
 
-//    var context: Context,
+    //var context: FragmentoHistorialVacunacion,
     var listaHistorialM: ArrayList<Historial>
 
 ) : RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder>() {
@@ -30,7 +30,11 @@ class HistorialAdapter(
     override fun onBindViewHolder(holder: HistorialViewHolder, position: Int) {
         val historial = listaHistorialM.get(position)
 
-        holder.tvFecha.text = historial.proxima_cita_consulta.substring(0,10)
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(historial.proxima_cita_consulta)
+        val fechaFormateada = sdf.format(date)
+
+        holder.tvFecha.text = fechaFormateada
         holder.tvAplico.text = historial.aplico_consulta
         holder.tvProducto.text = historial.producto_consulta
 
