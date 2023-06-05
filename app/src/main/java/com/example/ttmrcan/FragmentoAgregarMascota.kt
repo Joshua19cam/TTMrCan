@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -96,8 +97,11 @@ class FragmentoAgregarMascota : Fragment() {
             val isValido = validarCampos()
             if(isValido){
                 if(!isEditando){
+                    if(imageMascota64!=""){
+                        mandarimagen()
+                    }
                     agregarMascota(valorUsuarioId)
-                    mandarimagen()
+
                     val fragmentTransaction = requireFragmentManager().beginTransaction()
                     fragmentTransaction.setCustomAnimations(
                         R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
@@ -130,7 +134,9 @@ class FragmentoAgregarMascota : Fragment() {
                 // Opcional: si deseas realizar alguna acción cuando no se selecciona nada
             }
         }
-
+        binding.editFechaMascotaA.isFocusable = false
+        binding.editFechaMascotaA.isFocusableInTouchMode = false
+        binding.editFechaMascotaA.inputType = InputType.TYPE_NULL
         binding.editFechaMascotaA.setOnClickListener{
             showDatePickerDialog()
         }

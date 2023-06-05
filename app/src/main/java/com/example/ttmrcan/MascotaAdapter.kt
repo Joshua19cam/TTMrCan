@@ -48,38 +48,6 @@ class MascotaAdapter(
             onClick?.verPerfil(mascota)
         }
 
-        /*if(imageUrl.isNullOrEmpty()){
-            holder.tvNombre.text = mascota.nombre_mascota.toString()
-            holder.btnEditar.setOnClickListener {
-                onClick?.editarMascota(mascota)
-            }
-            holder.btnBorrar.setOnClickListener {
-                onClick?.borrarMascota(mascota.id_mascota)
-            }
-            holder.iViewMascota.setOnClickListener {
-                onClick?.verPerfil(mascota)
-            }
-        }else{
-            holder.tvNombre.text = mascota.nombre_mascota.toString()
-
-            Glide.with(context).load(imageUrl).into(holder.iViewMascota)
-                //.diskCacheStrategy(DiskCacheStrategy.ALL) // Opcional: Almacenar en caché la imagen
-                //.apply(RequestOptions().placeholder(R.drawable.placeholder_image)) // Opcional: Establecer imagen de carga
-
-
-            holder.btnEditar.setOnClickListener {
-                onClick?.editarMascota(mascota)
-            }
-            holder.btnBorrar.setOnClickListener {
-                onClick?.borrarMascota(mascota.id_mascota)
-            }
-            holder.iViewMascota.setOnClickListener {
-                onClick?.verPerfil(mascota)
-            }
-        }*/
-
-
-
     }
 
     inner class MascotaViewHolder(itemView: View): ViewHolder(itemView){

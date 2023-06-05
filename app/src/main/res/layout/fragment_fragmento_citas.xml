@@ -1,14 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".FragmentoCitas">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="0dp"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="Próximas citas"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewCitasProximas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:padding="0dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/cardview_cita" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:fontFamily="@font/nunito_extrabold"
+            android:text="Agendar cita"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/btnAbrirCitaVacunacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#5c68FF"
+            android:drawableLeft="@drawable/ic_citas_vacunacion"
+            android:drawableRight="@drawable/menu_right"
+            android:fontFamily="@font/manrope_semibold"
+            android:isScrollContainer="false"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="20dp"
+            android:text="Cita de Vacunación"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="10dp"
+            app:iconPadding="15dp"
+            app:iconTint="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btnAbrirCitaMedica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#FF8264"
+            android:drawableLeft="@drawable/ic_citas_medicas"
+            android:drawableRight="@drawable/menu_right"
+            android:fontFamily="@font/manrope_semibold"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="20dp"
+            android:text="Cita Médica"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="10dp"
+            app:iconPadding="15dp" />
+
+        <Button
+            android:id="@+id/btnAbrirCitaEstetica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#01C07A"
+            android:drawableLeft="@drawable/ic_citas_esteticas"
+            android:drawableRight="@drawable/menu_right"
+            android:fontFamily="@font/manrope_semibold"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="20dp"
+            android:text="Cita Estética"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="10dp"
+            app:iconPadding="15dp" />
+
+    </LinearLayout>
 
 </FrameLayout>
+
+    <!-- tools:context=".FragmentoCitas" -->

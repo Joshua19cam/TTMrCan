@@ -15,6 +15,6 @@ data class Usuario(
     var password_usuario: String,
     var estatus_usuario: Int,
     var baja_usuario: Int,
-    //var foto_usuario: ByteArray, //Preguntar
+    var foto_usuario: String,
     var id_veterinario: Int
 )

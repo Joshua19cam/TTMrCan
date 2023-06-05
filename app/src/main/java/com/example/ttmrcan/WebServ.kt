@@ -4,19 +4,15 @@ import com.google.gson.GsonBuilder
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
+import java.util.Date
 
 object AppConstantes{
     const val  BASE_URL = "http://192.168.100.78:4000"
     //pala : http://192.168.0.123:3000
-    //joshua : 192.168.100.78
+    //joshua :192.168.100.78
     //omar: 192.168.0.120
+    // 192.168.0.112
 }
 
 interface WebServ {
@@ -35,6 +31,11 @@ interface WebServ {
     suspend fun obtenerMascotasUsuario(
         @Path("id_usuario") id_usuario: Int
     ): Response<MascotasResponse>
+
+    @GET("/citas/ocupadas/{fecha_cita}")
+    suspend fun obtenerHorasOcupadas(
+        @Path("fecha_cita") fecha_cita: String
+    ): Response<HorasOcupadasResponse>
 
     @GET("/mascota/historialM/{id_mascota}/{tipo_consulta}")
     suspend fun obtenerHistorial(
@@ -64,7 +65,7 @@ interface WebServ {
         @Body email_usuario: CorreoDestino
     ): Response<String>
 
-    @PUT("/usuario/update/{id}")
+    @PUT("/usuario/update/{id_usuario}")
     suspend fun actualizarUsuario(
         @Path("id_usuario") id_usuario: Int,
         @Body usuario: Usuario
@@ -81,6 +82,22 @@ interface WebServ {
         @Path("id_mascota") id_mascota: Int,
         @Body baja_mascota: Mascota
     ): Response<String>
+
+    @GET("/citas/{id_usuario}")
+    suspend fun obtenerCitas(
+        @Path("id_usuario") id_usuario: Int
+    ): Response<CitasResponse>
+    @POST("/cita/add")
+    suspend fun agregarCita(
+        @Body cita: Cita
+    ): Response<String>
+
+    //eliminar cita/cancelar
+    @DELETE("/cita/delete/{id_cita}")
+    suspend fun cancelarCita(
+        @Path("id_cita") id_cita: Int
+    ): Response<String>
+
 
 
 }

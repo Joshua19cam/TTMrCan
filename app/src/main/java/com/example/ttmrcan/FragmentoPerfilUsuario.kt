@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.ttmrcan.databinding.FragmentFragmentoLoginBinding
 import com.example.ttmrcan.databinding.FragmentFragmentoPerfilUsuarioBinding
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +72,38 @@ class FragmentoPerfilUsuario : Fragment() {
 
         mostrarPerfilNR(valorObtenidoEmail.toString(),valorObtenidoId)
 
+        binding.buttonEditarUsuario.setOnClickListener {
+            val fragmentoEditarUsuario = FragmentoEditarUsuario()
+            val args = Bundle()
+
+            args.putInt("id_usuario", usuario.id_usuario)
+            args.putString("nombre_usuario", usuario.nombre_usuario)
+            args.putString("apellido_usuario", usuario.apellido_usuario)
+            args.putString("telefono_usuario", usuario.telefono_usuario)
+            args.putString("email_usuario", usuario.email_usuario)
+            args.putString("estado_usuario", usuario.estado_usuario)
+            args.putString("ciudad_usuario", usuario.ciudad_usuario)
+            args.putString("colonia_usuario", usuario.colonia_usuario)
+            args.putInt("cp_usuario", usuario.cp_usuario)
+            args.putString("calle_usuario", usuario.calle_usuario)
+            args.putString("num_ext_usuario", usuario.num_ext_usuario)
+            args.putString("password_usuario", usuario.password_usuario)
+            args.putString("foto_usuario", usuario.foto_usuario)
+
+            fragmentoEditarUsuario.arguments = args
+
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            fragmentTransaction.setCustomAnimations(
+                R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+                R.anim.exit_left, // salida para el fragmento actual
+                R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+                R.anim.exit_rigth // salida para el fragmento actualizado
+            )
+            fragmentTransaction.replace(R.id.fragment_container, fragmentoEditarUsuario)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
     }
 
 
@@ -87,6 +121,10 @@ class FragmentoPerfilUsuario : Fragment() {
                         "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
                     )
                     binding.textViewInfoCitas.setText("Citas estéticas: ${consultas.consulta_esteticas}\nCitas médicas: ${consultas.consulta_medicas}\nCitas vacunación: ${consultas.consulta_vacunacion}")
+                    if(usuario.foto_usuario!=""){
+                        val uniqueId = System.currentTimeMillis().toString()
+                        Glide.with(this@FragmentoPerfilUsuario).load(usuario.foto_usuario).signature(ObjectKey(uniqueId)).into(binding.ivPerfilUusario)
+                    }
                 }else{
                     Toast.makeText(activity,"Error al consultar usuario", Toast.LENGTH_SHORT).show()
                 }

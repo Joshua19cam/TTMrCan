@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentoAgendarMedica">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewTituloCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/titulo_naranja_medica"
+                android:fontFamily="@font/nunito_extrabold"
+                android:gravity="center_horizontal"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Agendar Cita"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvSeleccionarMascotaCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Seleccione la mascota"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinnerSM_CM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/borde_azul"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/tvDescipcionCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Descripción"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etDescripcionCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                 />
+
+            <TextView
+                android:id="@+id/textViewObservacionesCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Observaciones"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTextTextObservacionesCM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:hint="Opcional" />
+
+            <TextView
+                android:id="@+id/textViewFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Fecha"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTextTextFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:hint="Seleccione la fecha" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/linea_punteada">
+
+                <Spinner
+                    android:id="@+id/hour_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:entries="@array/hours_array"
+                    android:minHeight="48dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:textAlignment="center" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnAgendarCitaMedica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#5CBBF6"
+                    android:drawableLeft="@drawable/plus"
+                    android:fontFamily="@font/nunito_extrabold"
+                    android:paddingLeft="35dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="Agendar"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
+
+                <Button
+                    android:id="@+id/btnCancelarCitaMedica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="#FF5252"
+                    android:drawableLeft="@drawable/ic_close"
+                    android:fontFamily="@font/nunito_extrabold"
+                    android:paddingLeft="35dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="Cancelar"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>    </ScrollView>
+
+</FrameLayout>
+    <!-- tools:context=".FragmentoAgendarMedica" -->

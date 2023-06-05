@@ -172,6 +172,7 @@ class FragmentoLogin : Fragment() {
                         sharedPreferencesUsuario.edit().putInt("id",usuario.id_usuario).apply()
                         sharedPreferencesUsuario.edit().putString("email",usuario.email_usuario).apply()
                         sharedPreferencesUsuario.edit().putString("nombreCompleto","${usuario.nombre_usuario} ${usuario.apellido_usuario}").apply()
+                        sharedPreferencesUsuario.edit().putString("img",usuario.foto_usuario).apply()
                         // Cambio del fragment Login a la activity MenuCliente cuando ya está dado de alta en el sistema
                         val intent = Intent(activity, MenuClienteR::class.java)
                         startActivity(intent)

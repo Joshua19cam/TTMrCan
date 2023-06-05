@@ -20,7 +20,7 @@ class RegistroCliente : AppCompatActivity() {
     lateinit var botonRegistro: Button
     var usuario = Usuario(-1,"", "","","",""
         ,"","",-1,"","","",0,
-        0,1)
+        0,"",1)
     var isEditando = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

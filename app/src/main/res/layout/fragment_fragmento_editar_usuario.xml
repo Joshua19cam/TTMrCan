@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentoEditarUsuario">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="157dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Editar perfil"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/usuario_1"
+        app:civ_border_color="#3d76f2"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btnEditarPerfilUsuario"
+        android:layout_width="49dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="108dp"
+        android:background="@drawable/stylo_margen_circular"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.012"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="387dp"
+        android:layout_height="389dp"
+        android:layout_marginTop="220dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonGuardarEditarPerfilUsuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            tools:ignore="ExtraText">
+
+            <TextView
+                android:id="@+id/tvNombreEditar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Nombre"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etNombreEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/tvApellidoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Apellidos"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/etApellidoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/textViewTelefonoRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Teléfono"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etTelefonoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="phone"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvCorreoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Correo electrónico"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etCorreoRegistroEditar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/tvEstadoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Estado"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etEstadoEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvCiudadEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Ciudad"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etCiudadEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvColoniaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Colonia"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etColoniaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvCPEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Código postal"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etCPEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvCalleEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Calle"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etCalleEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvNumExtEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Número exterior"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etNumExtEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/tvContrasenaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Contraseña"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etContrasenaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvConfirmarContrasenaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/mulish_bold"
+                android:text="Confirmar contraseña"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etConfirmarContrasenaEditarPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:fontFamily="@font/mulish_bold"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:textColor="@color/black" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonGuardarEditarPerfilUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/boton_redondo_azul"
+        android:fontFamily="@font/nunito"
+        android:text="Guardar"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_save"
+        app:iconTint="#020202"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonCancelarEditarPerfilUsuario"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonCancelarEditarPerfilUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/boton_redondo_rojo"
+        android:fontFamily="@font/nunito"
+        android:text="Cancelar"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_close"
+        app:iconTint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonGuardarEditarPerfilUsuario"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

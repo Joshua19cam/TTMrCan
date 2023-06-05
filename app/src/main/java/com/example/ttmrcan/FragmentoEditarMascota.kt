@@ -82,6 +82,7 @@ class FragmentoEditarMascota : Fragment() {
         val idMascota = arguments?.getInt("id_mascota")
         mascota.id_mascota = idMascota!!
         val nombreMascota = arguments?.getString("nombre_mascota")
+        mascota.nombre_mascota = nombreMascota!!
         val colorMascota = arguments?.getString("color_mascota")
         val razaMascota = arguments?.getString("raza_mascota")
         val fechaMascota = arguments?.getString("fecha_nacimiento_mascota")
@@ -98,8 +99,10 @@ class FragmentoEditarMascota : Fragment() {
         binding.editRazaMascotaE.setText(razaMascota)
         binding.editFechaMascotaE.setText(fechaFormateada)
 
-        val uniqueId = System.currentTimeMillis().toString()
-        Glide.with(this).load(fotoMascota).signature(ObjectKey(uniqueId)).into(binding.imageView2)
+        if(fotoMascota!=""){
+            val uniqueId = System.currentTimeMillis().toString()
+            Glide.with(this).load(fotoMascota).signature(ObjectKey(uniqueId)).into(binding.imageView2)
+        }
 
         binding.editFechaMascotaE.setOnClickListener{
             showDatePickerDialog()
@@ -113,8 +116,10 @@ class FragmentoEditarMascota : Fragment() {
             val isValido = validarCampos()
             if(isValido){
                 if(!isEditando){
+                    if(imageMascota64!=""){
+                        mandarimagen(fotoMascota.toString())
+                    }
                     actualizarMascota()
-                    mandarimagen()
                 }
             }
         }
@@ -125,15 +130,29 @@ class FragmentoEditarMascota : Fragment() {
 
     }
 
-    fun mandarimagen(){
+    fun mandarimagen(img : String){
 
-        val pattern = Regex("""/([A-Za-z0-9]+)\.png$""")
-        val matchResult = pattern.find(mascota.foto_mascota)
+        if (img!=""){
+            val pattern = Regex("""/([A-Za-z0-9]+)\.png$""")
+            val matchResult = pattern.find(mascota.foto_mascota)
 
-        val nombre = matchResult?.groupValues?.get(1)
+            val nombre = matchResult?.groupValues?.get(1)
 
-        val imagen = ImageModel(System.currentTimeMillis().toString(),nombre.toString(),imageMascota64)
-        viewModel.enviarFoto(imagen)
+            val imagen = ImageModel(System.currentTimeMillis().toString(),nombre.toString(),imageMascota64)
+            viewModel.enviarFoto(imagen)
+
+        }else{
+            val dateFormat = SimpleDateFormat("HHmmss")
+            val dateFormatD = SimpleDateFormat("ddMMyyyy")
+            val fechaActual = Date()
+            val fechaFormateada = dateFormatD.format(fechaActual)
+            val horaActual = dateFormat.format(Date()).substring(0,6)
+
+            val nombreC = mascota.nombre_mascota.trim()+fechaFormateada+horaActual
+            this.mascota.foto_mascota = "http://192.168.100.78/upload_image/img/$nombreC.png"
+            val imagenC = ImageModel(System.currentTimeMillis().toString(),nombreC.trim(),imageMascota64)
+            viewModel.enviarFoto(imagenC)
+        }
 
     }
 
@@ -207,7 +226,7 @@ class FragmentoEditarMascota : Fragment() {
             activity?.runOnUiThread{
                 if (call.isSuccessful){
                     Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
-                    //mostrarDialogo()
+                    mostrarDialogo()
                     requireActivity().onBackPressed()
 
                 }else{
@@ -222,7 +241,7 @@ class FragmentoEditarMascota : Fragment() {
                 ||binding.editRazaMascotaE.text.isNullOrEmpty()||binding.editFechaMascotaE.text.isNullOrEmpty())
     }
 
-    /*private fun mostrarDialogo() {
+    private fun mostrarDialogo() {
         val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
         dialogo?.setContentView(R.layout.dialogo_cambio_exitoso)
         val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_correcto)
@@ -231,8 +250,8 @@ class FragmentoEditarMascota : Fragment() {
         dialogo?.show()
         Handler().postDelayed({
             dialogo?.dismiss()
-        }, 5000)
-    }*/
+        }, 4000)
+    }
 
     companion object {
         /**

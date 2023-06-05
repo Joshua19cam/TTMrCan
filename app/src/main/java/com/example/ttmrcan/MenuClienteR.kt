@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
@@ -16,6 +17,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.ttmrcan.databinding.NavHeaderBinding
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +38,7 @@ class MenuClienteR : AppCompatActivity() {
         val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorNombre = sharedPreferencesUsuario.getString("nombreCompleto",null)
         val valorCorreo = sharedPreferencesUsuario.getString("email",null)
-
+        val valorImagen = sharedPreferencesUsuario.getString("img",null)
 
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
@@ -57,6 +60,13 @@ class MenuClienteR : AppCompatActivity() {
         val headerView = navigationView.getHeaderView(0)
         val nameTextView = headerView.findViewById<TextView>(R.id.tvUserName)
         val emailTextView = headerView.findViewById<TextView>(R.id.tvUserEmail)
+        val imgTv = headerView.findViewById<ImageView>(R.id.ivUserName)
+
+        if(valorImagen!=""){
+            val uniqueId = System.currentTimeMillis().toString()
+            Glide.with(this).load(valorImagen).signature(ObjectKey(uniqueId)).into(imgTv)
+        }
+
         nameTextView.text = valorNombre
         emailTextView.text = valorCorreo
 
