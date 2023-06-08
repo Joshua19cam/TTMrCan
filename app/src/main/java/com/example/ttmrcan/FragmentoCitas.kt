@@ -72,31 +72,16 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
         binding.btnAbrirCitaVacunacion.setOnClickListener {
             // Aquí se abrirá el fragmento de vacunación sin pasar ningún valor específico
-            val fragmentV = FragmentoAgendarVacunacion()
-            val fragmentManager = requireActivity().supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, fragmentV) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            irCitaVacuancion()
         }
 
         binding.btnAbrirCitaMedica.setOnClickListener {
             // Aquí se abrirá el fragmento de vacunación sin pasar ningún valor específico
-            val fragmentM = FragmentoAgendarMedica()
-            val fragmentManager = requireActivity().supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, fragmentM) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            irCitaMedica()
         }
 
         binding.btnAbrirCitaEstetica.setOnClickListener {
-            val fragmentE = FragmentoAgendarEstetica()
-            val fragmentManager = requireActivity().supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, fragmentE) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+            irCitaEstetica()
         }
 
         binding.recyclerviewCitasProximas.layoutManager = LinearLayoutManager(activity)
@@ -119,17 +104,13 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
     private fun obtenerCitasPendientes(id: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerCitas(id)
-            requireActivity().runOnUiThread {
-                if (call.isSuccessful) {
+            activity?.runOnUiThread {
+                if(call.isSuccessful) {
                     listaCitas = call.body()!!.listaCitas
                     //listaCitas = call.body()?.listaCitas ?: arrayListOf()
                     if (listaCitas.isEmpty()) {
                         // Muestra el mensaje "No tienes citas pendientes"
-                        Toast.makeText(
-                            requireContext(),
-                            "No tienes citas pendientes",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        //Toast.makeText(requireContext(),"No tienes citas pendientes",Toast.LENGTH_SHORT).show()
                     } else {
                         setupRecyclerView()
                     }
@@ -170,6 +151,69 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+    fun irCitaMedica(){
+        val fragmentM = FragmentoAgendarMedica()
+
+        val args = Bundle()
+
+        args.putString("tipo_cita", "Medica")
+
+        fragmentM.arguments = args
+
+        val fragmentManager = requireActivity().supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
+        fragmentTransaction.replace(R.id.fragment_container, fragmentM) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+    fun irCitaVacuancion(){
+        val fragmentM = FragmentoAgendarMedica()
+
+        val args = Bundle()
+
+        args.putString("tipo_cita", "Vacunacion")
+
+        fragmentM.arguments = args
+
+        val fragmentManager = requireActivity().supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
+        fragmentTransaction.replace(R.id.fragment_container, fragmentM) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+    fun irCitaEstetica(){
+        val fragmentM = FragmentoAgendarMedica()
+
+        val args = Bundle()
+
+        args.putString("tipo_cita", "Estetica")
+
+        fragmentM.arguments = args
+
+        val fragmentManager = requireActivity().supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
+        fragmentTransaction.replace(R.id.fragment_container, fragmentM) // Reemplaza "fragmentContainer" con el ID del contenedor donde deseas mostrar el fragmento de vacunación
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
     override fun cancelarCita(id: Int) {

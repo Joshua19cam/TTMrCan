@@ -10,4 +10,9 @@
     <color name="fondo_menu_lateral">#49A2D3</color>
     <color name="botones_azules">#3D76F2</color>
     <color name="verde">#01C07A</color>
+
+    <color name="cita_medica">#ff8264</color>
+    <color name="cita_estetica">#01c07a</color>
+    <color name="cita_vacunacion">#5c68ff</color>
+
 </resources>

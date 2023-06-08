@@ -113,12 +113,14 @@ class FragmentoAgregarMascota : Fragment() {
                     fragmentTransaction.addToBackStack(null)
                     fragmentTransaction.commit()
                 }
+            }else{
+                Toast.makeText(activity,"Alguno de los campos está vacío", Toast.LENGTH_SHORT).show()
             }
         }
 
         //Spinner de sexo para la mascota
 
-        val genderOptions = arrayOf("macho", "hembra")
+        val genderOptions = arrayOf("Macho", "Hembra")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genderOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
@@ -132,6 +134,7 @@ class FragmentoAgregarMascota : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Opcional: si deseas realizar alguna acción cuando no se selecciona nada
+                mascota.sexo_mascota = genderOptions[0]
             }
         }
         binding.editFechaMascotaA.isFocusable = false
@@ -217,8 +220,9 @@ class FragmentoAgregarMascota : Fragment() {
     }
 
     fun validarCampos(): Boolean{
-        return !(binding.editNombreMascotaA.text.isNullOrEmpty()||binding.sexoSpinner.isEmpty()
-                ||binding.editColorMascotaA.text.isNullOrEmpty()||binding.editRazaMascotaA.text.isNullOrEmpty()
+        return !(binding.editNombreMascotaA.text.isNullOrEmpty()
+                ||binding.editColorMascotaA.text.isNullOrEmpty()
+                ||binding.editRazaMascotaA.text.isNullOrEmpty()
                 ||binding.editFechaMascotaA.text.isNullOrEmpty())
     }
     fun agregarMascota(idUsuario: Int){

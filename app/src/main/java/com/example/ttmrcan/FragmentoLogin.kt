@@ -163,8 +163,8 @@ class FragmentoLogin : Fragment() {
                         fragmentTransaction.addToBackStack(null)
                         fragmentTransaction.commit()
                         // Se limpian los edit text
-                        binding.editTextCorreoLogIn.setText("")
-                        binding.editTextPasswordLogIn.setText("")
+                        /*binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")*/
 
 
                     }else {
@@ -177,8 +177,8 @@ class FragmentoLogin : Fragment() {
                         val intent = Intent(activity, MenuClienteR::class.java)
                         startActivity(intent)
                         // Se limpian los edit text
-                        binding.editTextCorreoLogIn.setText("")
-                        binding.editTextPasswordLogIn.setText("")
+                        /*binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")*/
                     }
 
                 }else{

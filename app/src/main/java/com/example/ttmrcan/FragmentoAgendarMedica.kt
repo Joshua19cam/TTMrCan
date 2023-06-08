@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.viewbinding.ViewBindings
 import com.example.ttmrcan.databinding.FragmentAgendarMedicaBinding
@@ -33,16 +34,16 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FragmentoAgendarMedica : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
     private lateinit var binding: FragmentAgendarMedicaBinding
-    // TODO prueba para guardar la id de la mascota
+
     private var listaMascotasId: List<String> = emptyList()
     private var listaMascotas: List<String> = emptyList()
     private var listaHorasOcupadas: List<String> = emptyList()
-    var listaHorasTotales = listOf("10:00:00", "10:30:00","11:00:00","11:30:00","12:00:00",
+    private var listaHorasTotales = listOf("10:00:00", "10:30:00","11:00:00","11:30:00","12:00:00",
         "12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00",
         "17:00:00","17:30:00","18:00:00")
     private var horasDisponibles: List<String> = emptyList()
@@ -64,8 +65,7 @@ class FragmentoAgendarMedica : Fragment() {
         return binding.root
     }
 
-    var isEditando = false
-    var cita = Cita(1,"Medica","","","","",1,1,1,0)
+    var cita = Cita(1,"","","","","",1,1,1,0)
     var horasOcupadas = HorasOcupadas(1,"","","","","",1,1,1,1)
 
 
@@ -76,26 +76,44 @@ class FragmentoAgendarMedica : Fragment() {
             requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorUsuarioId = sharedPreferencesUsuario.getInt("id", 2)
         this.cita.id_usuario = valorUsuarioId
+
+        val tipoCita = arguments?.getString("tipo_cita")
+        this.cita.tipo_cita = tipoCita.toString()
+
+        if(cita.tipo_cita=="Medica"){
+            val color = ContextCompat.getColorStateList(requireContext(), com.example.ttmrcan.R.color.cita_medica)
+            binding.textViewTituloCM.backgroundTintList = color
+        }else if(cita.tipo_cita=="Vacunacion"){
+            val color = ContextCompat.getColorStateList(requireContext(), com.example.ttmrcan.R.color.cita_vacunacion)
+            binding.textViewTituloCM.backgroundTintList = color
+            binding.tvDescipcionCM.setText("Descripción de vacuna")
+        }else if(cita.tipo_cita=="Estetica"){
+            val color = ContextCompat.getColorStateList(requireContext(), com.example.ttmrcan.R.color.cita_estetica)
+            binding.textViewTituloCM.backgroundTintList = color
+        }
+
+
         obtenerMascotasUsuario(valorUsuarioId)
 
         binding.btnAgendarCitaMedica.setOnClickListener {
-            /*val isValido = validarCampos()
+            // validar que todos lo campos esten llenos
+            val isValido = validarCampos()
             if(isValido){
-                if(!isEditando){
+                agendarCitaMedica()
+                val fragmentTransaction = requireFragmentManager().beginTransaction()
+                fragmentTransaction.setCustomAnimations(
+                    com.example.ttmrcan.R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+                    com.example.ttmrcan.R.anim.exit_left, // salida para el fragmento actual
+                    com.example.ttmrcan.R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+                    com.example.ttmrcan.R.anim.exit_rigth // salida para el fragmento actualizado
+                )
+                fragmentTransaction.replace(com.example.ttmrcan.R.id.fragment_container, FragmentoCitas())
+                fragmentTransaction.addToBackStack(null)
+                fragmentTransaction.commit()
+            }else{
+                Toast.makeText(activity,"Alguno de los campos está vacío", Toast.LENGTH_SHORT).show()
+            }
 
-                }
-            }*/
-            agendarCitaMedica()
-            val fragmentTransaction = requireFragmentManager().beginTransaction()
-            fragmentTransaction.setCustomAnimations(
-                com.example.ttmrcan.R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
-                com.example.ttmrcan.R.anim.exit_left, // salida para el fragmento actual
-                com.example.ttmrcan.R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
-                com.example.ttmrcan.R.anim.exit_rigth // salida para el fragmento actualizado
-            )
-            fragmentTransaction.replace(com.example.ttmrcan.R.id.fragment_container, FragmentoCitas())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
         }
         binding.editTextTextFecha.isFocusable = false
         binding.editTextTextFecha.isFocusableInTouchMode = false
@@ -117,49 +135,40 @@ class FragmentoAgendarMedica : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Acción cuando no se selecciona nada
+                cita.id_mascota = listaMascotasId[0].toInt()
             }
         }
 
     }
 
     fun agendarCitaMedica() {
-        this.cita.descripcion_cita = binding.etDescripcionCM.text.toString()
-        this.cita.observaciones_cita = binding.editTextTextObservacionesCM.text.toString()
 
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(binding.editTextTextFecha.text.toString())
-        val fechaFormateada = sdf.format(date)
+        if (listaMascotas.isNotEmpty()){
+            this.cita.descripcion_cita = binding.etDescripcionCM.text.toString()
+            this.cita.observaciones_cita = binding.editTextTextObservacionesCM.text.toString()
 
-        this.cita.fecha_cita = fechaFormateada
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(binding.editTextTextFecha.text.toString())
+            val fechaFormateada = sdf.format(date)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.agregarCita(cita)
-            activity?.runOnUiThread{
-                if (call.isSuccessful){
-                    Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
-                    limpiarCampos()
-                    limpiarObjeto()
-                }else{
-                    Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+            this.cita.fecha_cita = fechaFormateada
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val call = RetrofitClient.webServ.agregarCita(cita)
+                activity?.runOnUiThread{
+                    if (call.isSuccessful){
+                        Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        }else{
+            Toast.makeText(activity, "No puedes agendar si no tienes mascotas", Toast.LENGTH_SHORT).show()
         }
+
     }
 
-    fun limpiarCampos(){
-        binding.etDescripcionCM.setText("")
-        binding.editTextTextObservacionesCM.setText("")
-        binding.editTextTextFecha.setText("")
-    }
-
-    fun limpiarObjeto(){
-        this.cita.id_mascota = 0
-        this.cita.descripcion_cita = ""
-        this.cita.observaciones_cita = ""
-        this.cita.fecha_cita = ""
-        this.cita.hora_cita = ""
-        this.cita.id_mascota = 1
-    }
 
     private fun obtenerHorasDisponibles(fecha : String) {
 
@@ -195,6 +204,7 @@ class FragmentoAgendarMedica : Fragment() {
                         horasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         binding.hourSpinner.adapter = horasAdapter
                     } else {
+
                         val formatoEntrada = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                         val formatoSalida = SimpleDateFormat("h:mm a", Locale.getDefault())
 
@@ -208,7 +218,7 @@ class FragmentoAgendarMedica : Fragment() {
                         val horasAdapter = ArrayAdapter(
                             requireContext(),
                             R.layout.simple_spinner_item,
-                            listaHorasTotales
+                            listaHorasFormateadas
                         )
 
                         horasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -228,13 +238,19 @@ class FragmentoAgendarMedica : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if(horasDisponibles.isNotEmpty()) {
                     cita.hora_cita = horasDisponibles[position]
+                }else{
+                    cita.hora_cita = listaHorasTotales[position]
                 }
                 // Aquí puedes guardar la selección en una variable o hacer lo que desees con ella
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Opcional: si deseas realizar alguna acción cuando no se selecciona nada
-                Toast.makeText(activity,"Seleccione una hora para su cita",Toast.LENGTH_SHORT).show()
+                if(horasDisponibles.isNotEmpty()) {
+                    cita.hora_cita = horasDisponibles[0]
+                }else{
+                    cita.hora_cita = listaHorasTotales[0]
+                }
             }
         }
     }
@@ -284,14 +300,13 @@ class FragmentoAgendarMedica : Fragment() {
             obtenerHorasDisponibles(selectedDate)
         }, year, month, dayOfMonth)
 
+        datePickerDialog.datePicker.minDate = calendar.timeInMillis
+
         datePickerDialog.show()
     }
-
-    /*fun validarCampos(): Boolean{
-        return !(binding.editNombreMascotaA.text.isNullOrEmpty()||binding.sexoSpinner.isEmpty()
-                ||binding.editColorMascotaA.text.isNullOrEmpty()||binding.editRazaMascotaA.text.isNullOrEmpty()
-                ||binding.editFechaMascotaA.text.isNullOrEmpty())
-    }*/
+    fun validarCampos(): Boolean{
+        return !(binding.etDescripcionCM.text.isNullOrEmpty()||binding.editTextTextFecha.text.isEmpty())
+    }
 
     companion object {
         /**

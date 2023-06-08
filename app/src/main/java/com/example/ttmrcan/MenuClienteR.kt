@@ -13,6 +13,7 @@ import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -104,7 +105,9 @@ class MenuClienteR : AppCompatActivity() {
                     sharedPreferences.edit().clear().apply()
                     val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
                     sharedPreferencesUsuario.edit().clear().apply()
-                    finish()
+                    val intent = Intent(this, FlashScreen::class.java)
+                    startActivity(intent)
+                    //finish()
                 }
             }
             true

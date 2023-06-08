@@ -40,34 +40,31 @@
         android:id="@+id/btnEditarPerfilUsuario"
         android:layout_width="49dp"
         android:layout_height="49dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="116dp"
         android:background="@drawable/stylo_margen_circular"
         app:backgroundTint="@null"
         app:icon="@drawable/ic_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.012"
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="387dp"
         android:layout_height="389dp"
-        android:layout_marginTop="220dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonGuardarEditarPerfilUsuario"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/btnEditarPerfilUsuario">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="15dp"
-            tools:ignore="ExtraText">
+            tools:ignore="ExtraText"
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/tvNombreEditar"
@@ -396,29 +393,10 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonGuardarEditarPerfilUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/boton_redondo_azul"
-        android:fontFamily="@font/nunito"
-        android:text="Guardar"
-        android:textAllCaps="false"
-        android:textColor="#000000"
-        app:backgroundTint="@null"
-        app:icon="@drawable/ic_save"
-        app:iconTint="#020202"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonCancelarEditarPerfilUsuario"
-        tools:ignore="MissingConstraints" />
-
-    <Button
         android:id="@+id/buttonCancelarEditarPerfilUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/boton_redondo_rojo"
         android:fontFamily="@font/nunito"
         android:text="Cancelar"
@@ -426,11 +404,36 @@
         android:textColor="#000000"
         app:backgroundTint="@null"
         app:icon="@drawable/ic_close"
+
         app:iconTint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonGuardarEditarPerfilUsuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonGuardarEditarPerfilUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonGuardarEditarPerfilUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/boton_redondo_azul"
+        android:fontFamily="@font/nunito"
+        android:text="Guardar"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:backgroundTint="@null"
+        app:icon="@drawable/ic_save"
+
+        app:iconTint="#020202"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCancelarEditarPerfilUsuario"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="MissingConstraints" />
 
 

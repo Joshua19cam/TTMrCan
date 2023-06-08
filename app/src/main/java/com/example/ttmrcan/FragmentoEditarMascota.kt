@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.text.InputType
 import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -103,7 +104,9 @@ class FragmentoEditarMascota : Fragment() {
             val uniqueId = System.currentTimeMillis().toString()
             Glide.with(this).load(fotoMascota).signature(ObjectKey(uniqueId)).into(binding.imageView2)
         }
-
+        binding.editFechaMascotaE.isFocusable = false
+        binding.editFechaMascotaE.isFocusableInTouchMode = false
+        binding.editFechaMascotaE.inputType = InputType.TYPE_NULL
         binding.editFechaMascotaE.setOnClickListener{
             showDatePickerDialog()
         }
@@ -115,12 +118,12 @@ class FragmentoEditarMascota : Fragment() {
         binding.buttonGuardarEditar.setOnClickListener {
             val isValido = validarCampos()
             if(isValido){
-                if(!isEditando){
-                    if(imageMascota64!=""){
-                        mandarimagen(fotoMascota.toString())
-                    }
-                    actualizarMascota()
+                if(imageMascota64!=""){
+                    mandarimagen(fotoMascota.toString())
                 }
+                actualizarMascota()
+            }else{
+                Toast.makeText(activity,"Alguno de los campos está vacío", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -225,7 +228,7 @@ class FragmentoEditarMascota : Fragment() {
             val call = RetrofitClient.webServ.actualizarMascota(mascota.id_mascota, mascota)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
-                    Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity,call.body().toString(),Toast.LENGTH_SHORT).show()
                     mostrarDialogo()
                     requireActivity().onBackPressed()
 

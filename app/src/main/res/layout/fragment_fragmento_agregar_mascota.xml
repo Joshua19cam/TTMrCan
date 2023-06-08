@@ -67,7 +67,7 @@
                 android:background="@drawable/borde_azul"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text=" "
+                android:text=""
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <TextView
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/borde_azul"
                 android:ems="10"
-                android:hint="AAAA-MM-DD"
+                android:hint="Seleccione la fecha"
                 android:inputType="textPersonName"
                 tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
