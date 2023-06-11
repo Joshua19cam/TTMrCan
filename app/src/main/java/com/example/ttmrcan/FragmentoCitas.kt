@@ -1,8 +1,13 @@
 package com.example.ttmrcan
 
-import android.app.Dialog
+import android.app.*
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +16,14 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ttmrcan.databinding.FragmentFragmentoCitasBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -35,6 +43,9 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
     private lateinit var binding: FragmentFragmentoCitasBinding
     private lateinit var inflater: LayoutInflater
+
+    private lateinit var pendingIntent: PendingIntent
+    private lateinit var alarmManager: AlarmManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,13 +73,18 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
     lateinit var adaptador: CitasAdapter
     var listaCitas = arrayListOf<Cita>()
+    var nuevaLista = arrayListOf<String>()
     //var mascotaNueva = Mascota(-1,"","","","","","",0,"",0)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
+
+        createChannel()
+        obtenerCitasPendientes(valorUsuarioId)
 
         binding.btnAbrirCitaVacunacion.setOnClickListener {
             // Aquí se abrirá el fragmento de vacunación sin pasar ningún valor específico
@@ -87,7 +103,7 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
         binding.recyclerviewCitasProximas.layoutManager = LinearLayoutManager(activity)
         setupRecyclerView()
 
-        obtenerCitasPendientes(valorUsuarioId)
+
 
         // Configurar el botón Atrás del teléfono para volver al FragmentoA
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -99,9 +115,16 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
             setupRecyclerView()
             obtenerCitasPendientes(valorUsuarioId)
         }
+
+        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
     private fun obtenerCitasPendientes(id: Int) {
+
+        val sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val citasProcesadas = sharedPreferences.getStringSet("citasProcesadas", mutableSetOf())?.toMutableSet()
+            ?: mutableSetOf()
+
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerCitas(id)
             activity?.runOnUiThread {
@@ -113,6 +136,7 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
                         //Toast.makeText(requireContext(),"No tienes citas pendientes",Toast.LENGTH_SHORT).show()
                     } else {
                         setupRecyclerView()
+                        generarCitas(listaCitas, citasProcesadas, sharedPreferences)
                     }
                 } else {
                     Toast.makeText(
@@ -128,12 +152,14 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
 
     fun setupRecyclerView() {
-        adaptador = CitasAdapter(listaCitas)
+        adaptador = CitasAdapter(this,listaCitas)
         adaptador.setOnClick(this@FragmentoCitas)
         binding.recyclerviewCitasProximas.adapter = adaptador
     }
 
     companion object {
+
+        const val MY_CHANNEL_ID = "myChannel"
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -218,6 +244,7 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
     override fun cancelarCita(id: Int) {
         mostrarDialogoCancelar(id)
+        cancelNotification(id)
     }
 
     private fun mostrarDialogoCancelar(id: Int){
@@ -251,4 +278,95 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
             dialogo?.cancel()
         }
     }
+
+    private fun generarCitas(listaCitas: ArrayList<Cita>, citasProcesadas: MutableSet<String>, sharedPreferences: SharedPreferences) {
+        val citasProcesadasCopy = citasProcesadas.toMutableSet()
+
+        for (cita in listaCitas) {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(cita.fecha_cita)
+            val fechaFormateada = sdf.format(date)
+
+            val fecha = fechaFormateada
+            val hora = cita.hora_cita
+            val id = cita.id_cita
+            val tipo = cita.tipo_cita
+
+            if (!citasProcesadasCopy.contains(id.toString())) {
+                scheduleNotification(fecha, hora,tipo, id)
+                citasProcesadasCopy.add(id.toString())
+            }
+        }
+
+        citasProcesadasCopy.retainAll(listaCitas.map { it.id_cita.toString() })
+
+        sharedPreferences.edit().putStringSet("citasProcesadas", citasProcesadasCopy).apply()
+    }
+
+    private fun scheduleNotification(date: String,hour: String,tipo: String,notificationId: Int) {
+
+        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val targetDateTime = dateTimeFormat.parse("$date $hour") // Parsear la fecha y hora especificadas
+
+        val calendar = Calendar.getInstance()
+        calendar.time = targetDateTime
+        calendar.add(Calendar.HOUR_OF_DAY, -24) // Restar una 24 hora
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)
+        val fechaFormateada = sdf.format(date)
+
+        val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val hora = inputFormat.parse(hour)
+        val horaFormateada = outputFormat.format(hora)
+
+        val notificationIntent = Intent(requireContext(), AlarmNotification::class.java)
+        notificationIntent.putExtra("titulo", "Recordatorio de tu cita: ${tipo}") // Ejemplo de título
+        notificationIntent.putExtra("subtitulo", "Cita el ${fechaFormateada} a las ${horaFormateada}") // Ejemplo de subtítulo
+        notificationIntent.putExtra("id", notificationId) // Ejemplo de id
+
+        pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            notificationId,
+            notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager?.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+
+    }
+
+    private fun cancelNotification(notificationId: Int) {
+        val notificationIntent = Intent(requireContext(), AlarmNotification::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext(),
+            notificationId,
+            notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        alarmManager?.cancel(pendingIntent)
+    }
+
+    private fun createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importancia = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(
+                MY_CHANNEL_ID,
+                "MySuperChannel",
+                importancia
+            ).apply {
+                description = "CITA DE LA MASCOTA"
+                enableVibration(true) // Opcionalmente, puedes desactivar la vibración de la notificación
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC // Para que se muestre en la pantalla de bloqueo
+            }
+
+            val notificationManager: NotificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 }

@@ -1,21 +1,25 @@
 package com.example.ttmrcan
 
+import android.app.*
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CitasAdapter(
-    //var context: FragmentoCitas,
+    var context: FragmentoCitas,
     var listaCitas: ArrayList<Cita>,
 ): RecyclerView.Adapter<CitasAdapter.CitaViewHolder>() {
 
     private var onClick: OnItemClicked? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitaViewHolder {
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.cardview_cita,parent,false)

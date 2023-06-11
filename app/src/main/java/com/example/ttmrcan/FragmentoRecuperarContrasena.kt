@@ -3,6 +3,7 @@ package com.example.ttmrcan
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.example.ttmrcan.databinding.FragmentFragmentoRecuperarContrasenaBindi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,23 +60,36 @@ class FragmentoRecuperarContrasena : Fragment() {
         binding.btnEnviarP.setOnClickListener {
             val correoOP = binding.editTextCorreoOP.text.toString()
             correoDestino.email_usuario = correoOP
+
             if (correoOP.isNotEmpty()) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val call = RetrofitClient.webServ.enviarCorreo(correoDestino)
-                    activity?.runOnUiThread{
-                        if (call.isSuccessful){
-                            mostrarDialogo()
-                            requireActivity().onBackPressed()
-                            //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                if (validarCorreoElectronico(binding.editTextCorreoOP.text.toString())) {
+                    // El correo electrónico es válido
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val call = RetrofitClient.webServ.enviarCorreo(correoDestino)
+                        activity?.runOnUiThread{
+                            if (call.isSuccessful){
+                                mostrarDialogo()
+                                requireActivity().onBackPressed()
+                                //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
+
+                } else {
+                    // El correo electrónico no es válido, mostrar un Toast
+                    Toast.makeText(activity, "Dirección de correo electrónico no válida", Toast.LENGTH_SHORT).show()
                 }
             }else{
                 Toast.makeText(activity,"Aun no se ingresa ningun correo", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun validarCorreoElectronico(texto: String): Boolean {
+        val patronCorreoElectronico: Pattern = Patterns.EMAIL_ADDRESS
+        return patronCorreoElectronico.matcher(texto).matches()
     }
 
     private fun mostrarDialogo() {

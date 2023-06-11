@@ -116,21 +116,44 @@ class FragmentoEditarMascota : Fragment() {
         }
 
         binding.buttonGuardarEditar.setOnClickListener {
-            val isValido = validarCampos()
-            if(isValido){
-                if(imageMascota64!=""){
-                    mandarimagen(fotoMascota.toString())
-                }
-                actualizarMascota()
-            }else{
-                Toast.makeText(activity,"Alguno de los campos está vacío", Toast.LENGTH_SHORT).show()
-            }
+            camposVacios()
         }
 
         binding.buttonCancelarEditar.setOnClickListener {
             requireActivity().onBackPressed() //Esto se ocupa para regresar entre fragments ES UTIL
         }
 
+    }
+
+    fun camposVacios(){
+        if(binding.editNombreMascotaE.text.isNullOrEmpty()){
+            showToast("El campo 'Nombre de la mascota' está vacío")
+            return
+        }
+        if(binding.editColorMascotaE.text.isNullOrEmpty()){
+            showToast("El campo 'Color' está vacío")
+            return
+        }
+        if(binding.editRazaMascotaE.text.isNullOrEmpty()){
+            showToast("El campo 'Raza' está vacío")
+            return
+        }
+        if(binding.editFechaMascotaE.text.isNullOrEmpty()){
+            showToast("El campo 'Fecha de nacimiento' está vacío")
+            return
+        }
+
+        //accion
+
+        if(imageMascota64!=""){
+            mandarimagen(mascota.foto_mascota)
+        }
+        actualizarMascota()
+
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     fun mandarimagen(img : String){

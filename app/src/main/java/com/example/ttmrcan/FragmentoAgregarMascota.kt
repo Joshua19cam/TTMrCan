@@ -2,6 +2,7 @@ package com.example.ttmrcan
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -94,28 +96,7 @@ class FragmentoAgregarMascota : Fragment() {
         }
 
         binding.buttonGuardar.setOnClickListener {
-            val isValido = validarCampos()
-            if(isValido){
-                if(!isEditando){
-                    if(imageMascota64!=""){
-                        mandarimagen()
-                    }
-                    agregarMascota(valorUsuarioId)
-
-                    val fragmentTransaction = requireFragmentManager().beginTransaction()
-                    fragmentTransaction.setCustomAnimations(
-                        R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
-                        R.anim.exit_left, // salida para el fragmento actual
-                        R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
-                        R.anim.exit_rigth // salida para el fragmento actualizado
-                    )
-                    fragmentTransaction.replace(R.id.fragment_container, FragmentoListaMascotas())
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
-                }
-            }else{
-                Toast.makeText(activity,"Alguno de los campos está vacío", Toast.LENGTH_SHORT).show()
-            }
+            camposVacios(valorUsuarioId)
         }
 
         //Spinner de sexo para la mascota
@@ -148,6 +129,47 @@ class FragmentoAgregarMascota : Fragment() {
             openGallery()
         }
 
+    }
+
+    fun camposVacios(idUsuario: Int){
+        if(binding.editNombreMascotaA.text.isNullOrEmpty()){
+            showToast("El campo 'Nombre de la mascota' está vacío")
+            return
+        }
+        if(binding.editColorMascotaA.text.isNullOrEmpty()){
+            showToast("El campo 'Color' está vacío")
+            return
+        }
+        if(binding.editRazaMascotaA.text.isNullOrEmpty()){
+            showToast("El campo 'Raza' está vacío")
+            return
+        }
+        if(binding.editFechaMascotaA.text.isNullOrEmpty()){
+            showToast("El campo 'Fecha de nacimiento' está vacío")
+            return
+        }
+
+        //accion
+        if(imageMascota64!=""){
+            mandarimagen()
+        }
+        agregarMascota(idUsuario)
+
+        val fragmentTransaction = requireFragmentManager().beginTransaction()
+        fragmentTransaction.setCustomAnimations(
+            R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+            R.anim.exit_left, // salida para el fragmento actual
+            R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+            R.anim.exit_rigth // salida para el fragmento actualizado
+        )
+        fragmentTransaction.replace(R.id.fragment_container, FragmentoListaMascotas())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     fun mandarimagen(){
@@ -219,15 +241,8 @@ class FragmentoAgregarMascota : Fragment() {
         datePickerDialog.show()
     }
 
-    fun validarCampos(): Boolean{
-        return !(binding.editNombreMascotaA.text.isNullOrEmpty()
-                ||binding.editColorMascotaA.text.isNullOrEmpty()
-                ||binding.editRazaMascotaA.text.isNullOrEmpty()
-                ||binding.editFechaMascotaA.text.isNullOrEmpty())
-    }
     fun agregarMascota(idUsuario: Int){
         this.mascota.nombre_mascota = binding.editNombreMascotaA.text.toString()
-//        this.mascota.sexo_mascota = binding.editSexoMascotaA.text.toString()
         this.mascota.color_mascota = binding.editColorMascotaA.text.toString()
         this.mascota.raza_mascota = binding.editRazaMascotaA.text.toString()
 
@@ -242,9 +257,8 @@ class FragmentoAgregarMascota : Fragment() {
             val call = RetrofitClient.webServ.agregarMascota(mascota)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
-                    Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
-                    limpiarCampos()
-                    limpiarObjeto()
+                    //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                    mostrarDialogo()
                 }else{
                     Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -252,28 +266,17 @@ class FragmentoAgregarMascota : Fragment() {
         }
     }
 
-    fun limpiarCampos(){
-        binding.editNombreMascotaA.setText("")
-//        binding.editSexoMascotaA.setText("")
-        binding.editColorMascotaA.setText("")
-        binding.editRazaMascotaA.setText("")
-        binding.editFechaMascotaA.setText("")
-
+    private fun mostrarDialogo() {
+        val dialogo = activity?.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo?.setContentView(R.layout.dialogo_cambio_exitoso)
+        val titulo = dialogo?.findViewById<TextView>(R.id.dialogo_correcto)
+        titulo?.text = "Su mascota se registró correctamente"
+        dialogo?.setCancelable(true)
+        dialogo?.show()
+        Handler().postDelayed({
+            dialogo?.dismiss()
+        }, 3000)
     }
-
-    fun limpiarObjeto(){
-        this.mascota.id_mascota = -1
-        this.mascota.nombre_mascota = ""
-        this.mascota.color_mascota = ""
-        this.mascota.raza_mascota = ""
-        this.mascota.padecimientos_mascota = ""
-        this.mascota.especie_mascota = ""
-        this.mascota.fecha_nacimiento_mascota = ""
-        this.mascota.sexo_mascota = ""
-        this.mascota.foto_mascota = ""
-        this.mascota.id_usuario = -1
-    }
-
 
     companion object {
         /**

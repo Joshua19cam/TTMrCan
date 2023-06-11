@@ -63,8 +63,14 @@ class FragmentoClienteNR : Fragment() {
         val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
         val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
 
+        val emailUsuario = arguments?.getString("email_usuario_capcha")
+
         // Función que se encarga de llamar al metodo para obtener los datos del correo ingresado
-        mostrarPerfilNR(valorObtenidoEmail.toString())
+        if(valorObtenidoEmail.isNullOrEmpty()){
+            mostrarPerfilNR(emailUsuario.toString())
+        }else{
+            mostrarPerfilNR(valorObtenidoEmail.toString())
+        }
 
         binding.btnCerrarSesion.setOnClickListener {
             // Al presionar el botón cerrar sesión se deben eliminar los datos amacenados en Sharedpreferences

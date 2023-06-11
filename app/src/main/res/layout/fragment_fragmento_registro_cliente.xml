@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".FragmentoRegistroCliente">
+
+
+    <TextView
+        android:id="@+id/tituloRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="21dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Registro"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/scrollViewRegistro"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <ScrollView
+        android:id="@+id/scrollViewRegistro"
+        android:layout_width="349dp"
+        android:layout_height="653dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tituloRegistro">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            tools:ignore="ExtraText">
+
+            <TextView
+                android:id="@+id/textNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Nombre"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,HardcodedText,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textApellido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Apellido"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editApellido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck"
+                android:autofillHints="" />
+
+            <TextView
+                android:id="@+id/textTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Teléfono"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/textCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Correo Electrónico"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/editCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:paddingTop="15dp"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/textEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Estado"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/editEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textCiudad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Ciudad"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editCiudad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textColonia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Colonia"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editColonia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textCP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Código Postal"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editCP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/textCalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Calle"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editCalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textNumE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Número exterior"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editNumE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/textContra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Contraseña"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editContra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textConfContra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingTop="15dp"
+                android:text="Confirmar contraseña"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editConfContra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_azul"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/buttonRegistrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/boton_redondo_azul"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Registrar"
+                app:backgroundTint="@null"
+                tools:ignore="VisualLintButtonSize" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- tools:context=".FragmentoRegistroCliente" -->

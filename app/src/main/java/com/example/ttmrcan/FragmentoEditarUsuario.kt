@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Base64
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Pattern
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -123,7 +125,11 @@ class FragmentoEditarUsuario : Fragment() {
             openGallery()
         }
 
-        binding.buttonGuardarEditarPerfilUsuario.setOnClickListener {
+        binding.buttonGuardarEditarPerfilUsuario.setOnClickListener{
+            camposVacios()
+        }
+
+        /*binding.buttonGuardarEditarPerfilUsuario.setOnClickListener {
             val isValido = validarCampos()
             if(isValido){
                 if(!isEditando){
@@ -133,8 +139,84 @@ class FragmentoEditarUsuario : Fragment() {
                     actualizarUsuario()
                 }
             }
+        }*/
+
+    }
+    fun camposVacios(){
+        if(binding.etNombreEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Nombre' está vacío")
+            return
+        }
+        if(binding.etApellidoEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Apellido' está vacío")
+            return
+        }
+        if(binding.etTelefonoEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Teléfono' está vacío")
+            return
+        }
+        if(binding.etCorreoRegistroEditar.text.isNullOrEmpty()){
+            showToast("El campo 'Correo Electrónico' está vacío")
+            return
+        }
+        //Para que tenga bien la estructura email
+        if (!validarCorreoElectronico(binding.etCorreoRegistroEditar.text.toString())) {
+            // El correo electrónico es válido
+            showToast("Dirección de correo electrónico no válida")
+            return
+        }
+        if(binding.etEstadoEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Estado' está vacío")
+            return
+        }
+        if(binding.etCiudadEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Ciudad' está vacío")
+            return
+        }
+        if(binding.etColoniaEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Colonia' está vacío")
+            return
+        }
+        if(binding.etCPEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Código postal' está vacío")
+            return
+        }
+        if(binding.etCalleEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Calle' está vacío")
+            return
+        }
+        if(binding.etNumExtEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Número exterior' está vacío")
+            return
+        }
+        if(binding.etContrasenaEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Contraseña' está vacío")
+            return
+        }
+        if(binding.etConfirmarContrasenaEditarPerfil.text.isNullOrEmpty()){
+            showToast("El campo 'Confirmar contraseña' está vacío")
+            return
+        }
+        if(binding.etConfirmarContrasenaEditarPerfil.text.toString() != binding.etContrasenaEditarPerfil.text.toString()){
+            showToast("Las contraseñas ingresadas no coinciden ")
+            return
         }
 
+        //accion
+        if(imageUsuario64!=""){
+            mandarimagen(usuario.foto_usuario)
+        }
+        actualizarUsuario()
+
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun validarCorreoElectronico(texto: String): Boolean {
+        val patronCorreoElectronico: Pattern = Patterns.EMAIL_ADDRESS
+        return patronCorreoElectronico.matcher(texto).matches()
     }
 
     fun actualizarUsuario(){
@@ -154,7 +236,7 @@ class FragmentoEditarUsuario : Fragment() {
             val call = RetrofitClient.webServ.actualizarUsuario(usuario.id_usuario,usuario)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
-                    Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                     mostrarDialogo()
                     requireActivity().onBackPressed()
 
@@ -163,15 +245,6 @@ class FragmentoEditarUsuario : Fragment() {
                 }
             }
         }
-    }
-
-    fun validarCampos(): Boolean{
-        return !(binding.etNombreEditarPerfil.text.isNullOrEmpty()||binding.etApellidoEditarPerfil.text.isNullOrEmpty()
-                ||binding.etTelefonoEditarPerfil.text.isNullOrEmpty()||binding.etCorreoRegistroEditar.text.isNullOrEmpty()
-                ||binding.etEstadoEditarPerfil.text.isNullOrEmpty()||binding.etCiudadEditarPerfil.text.isNullOrEmpty()
-                ||binding.etColoniaEditarPerfil.text.isNullOrEmpty()||binding.etCPEditarPerfil.text.isNullOrEmpty()
-                ||binding.etCalleEditarPerfil.text.isNullOrEmpty()||binding.etNumExtEditarPerfil.text.isNullOrEmpty()
-                ||binding.etContrasenaEditarPerfil.text.isNullOrEmpty()||binding.etConfirmarContrasenaEditarPerfil.text.isNullOrEmpty())
     }
 
     private fun mostrarDialogo() {
@@ -183,7 +256,7 @@ class FragmentoEditarUsuario : Fragment() {
         dialogo?.show()
         Handler().postDelayed({
             dialogo?.dismiss()
-        }, 4000)
+        }, 3000)
     }
 
     fun mandarimagen(img : String){

@@ -131,8 +131,19 @@ class FragmentoLogin : Fragment() {
         }
 
         binding.tvRegistrarse.setOnClickListener {
-            val intent = Intent(activity, RegistroCliente::class.java)
-            startActivity(intent)
+            val fragmentoRegistroCliente = FragmentoRegistroCliente()
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            fragmentTransaction.setCustomAnimations(
+                R.anim.enter_rigth_to_left, // entrada para el fragmento que se está agregando
+                R.anim.exit_left, // salida para el fragmento actual
+                R.anim.enter_left_to_rigth, // entrada para el fragmento actualizado
+                R.anim.exit_rigth // salida para el fragmento actualizado
+            )
+            fragmentTransaction.replace(R.id.frameContainerLogin, fragmentoRegistroCliente)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+            /*val intent = Intent(activity, RegistroCliente::class.java)
+            startActivity(intent)*/
         }
 
     }

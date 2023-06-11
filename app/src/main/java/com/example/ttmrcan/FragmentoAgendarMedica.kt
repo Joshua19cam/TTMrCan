@@ -2,8 +2,10 @@ package com.example.ttmrcan
 
 import android.R
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
@@ -157,7 +160,7 @@ class FragmentoAgendarMedica : Fragment() {
                 val call = RetrofitClient.webServ.agregarCita(cita)
                 activity?.runOnUiThread{
                     if (call.isSuccessful){
-                        Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
+                        mostrarDialogo()
                     }else{
                         Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                     }
@@ -306,6 +309,18 @@ class FragmentoAgendarMedica : Fragment() {
     }
     fun validarCampos(): Boolean{
         return !(binding.etDescripcionCM.text.isNullOrEmpty()||binding.editTextTextFecha.text.isEmpty())
+    }
+
+    private fun mostrarDialogo() {
+        val dialogo = activity?.let { Dialog(it, com.example.ttmrcan.R.style.CustomDialogStyle) }
+        dialogo?.setContentView(com.example.ttmrcan.R.layout.dialogo_cambio_exitoso)
+        val titulo = dialogo?.findViewById<TextView>(com.example.ttmrcan.R.id.dialogo_correcto)
+        titulo?.text = "Cita agendada correctamente"
+        dialogo?.setCancelable(true)
+        dialogo?.show()
+        Handler().postDelayed({
+            dialogo?.dismiss()
+        }, 3000)
     }
 
     companion object {

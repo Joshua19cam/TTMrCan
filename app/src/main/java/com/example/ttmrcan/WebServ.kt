@@ -13,6 +13,9 @@ object AppConstantes{
     //joshua :192.168.100.78
     //omar: 192.168.0.120
     // 192.168.0.112
+    // 192.168.0.114 /lab computo
+    // 192.168.1.89
+    //rileway : "https://apinomas-production.up.railway.app"
 }
 
 interface WebServ {
