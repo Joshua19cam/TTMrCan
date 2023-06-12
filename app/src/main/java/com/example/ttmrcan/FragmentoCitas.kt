@@ -80,11 +80,11 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val idGuardado = sharedPreferencesLogin.getInt("ip", 0)
 
         createChannel()
-        obtenerCitasPendientes(valorUsuarioId)
+        obtenerCitasPendientes(idGuardado)
 
         binding.btnAbrirCitaVacunacion.setOnClickListener {
             // Aquí se abrirá el fragmento de vacunación sin pasar ningún valor específico
@@ -113,7 +113,7 @@ class FragmentoCitas : Fragment(), CitasAdapter.OnItemClicked  {
 
             binding.recyclerviewCitasProximas.layoutManager = LinearLayoutManager(requireContext())
             setupRecyclerView()
-            obtenerCitasPendientes(valorUsuarioId)
+            obtenerCitasPendientes(idGuardado)
         }
 
         alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager

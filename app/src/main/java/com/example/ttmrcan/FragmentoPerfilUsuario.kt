@@ -65,12 +65,36 @@ class FragmentoPerfilUsuario : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
-        val valorObtenidoId = sharedPreferencesUsuario.getInt("id",0)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val correoGuardado = sharedPreferencesLogin.getString("correo", null)
 
-        mostrarPerfilNR(valorObtenidoEmail.toString(),valorObtenidoId)
+        if (correoGuardado != null) {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val call = RetrofitClient.webServ.obtenerIdUsuario(correoGuardado)
+                activity?.runOnUiThread{
+                    if(call.isSuccessful){
+                        usuario = call.body()!!
+                        mostrarPerfilNR(usuario.id_usuario)
+                        binding.textViewInfoP.setText(
+                            "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
+                        )
+                        if(usuario.foto_usuario!="0"){
+                            val uniqueId = System.currentTimeMillis().toString()
+                            Glide.with(this@FragmentoPerfilUsuario).load(usuario.foto_usuario).signature(ObjectKey(uniqueId)).into(binding.ivPerfilUusario)
+                        }
+                    }else{
+                        Toast.makeText(activity,"Error al consultar usuario",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        //TODO
+        /*val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+        val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
+        val valorObtenidoId = sharedPreferencesUsuario.getInt("id",0)*/
+
 
         binding.buttonEditarUsuario.setOnClickListener {
             val fragmentoEditarUsuario = FragmentoEditarUsuario()
@@ -108,23 +132,14 @@ class FragmentoPerfilUsuario : Fragment() {
 
 
     @SuppressLint("SetTextI18n")
-    fun mostrarPerfilNR(email : String,id : Int){
+    fun mostrarPerfilNR(id : Int){
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             val call2 = RetrofitClient.webServ.obtenerConsultas(id)
             activity?.runOnUiThread{
-                if(call.isSuccessful || call2.isSuccessful){
-                    usuario = call.body()!!
+                if(call2.isSuccessful){
                     consultas = call2.body()!!
-                    binding.textViewInfoP.setText(
-                        "${usuario.nombre_usuario} ${usuario.apellido_usuario}\n${usuario.telefono_usuario}\n${usuario.email_usuario}"
-                    )
                     binding.textViewInfoCitas.setText("Citas estéticas: ${consultas.consulta_esteticas}\nCitas médicas: ${consultas.consulta_medicas}\nCitas vacunación: ${consultas.consulta_vacunacion}")
-                    if(usuario.foto_usuario!=""){
-                        val uniqueId = System.currentTimeMillis().toString()
-                        Glide.with(this@FragmentoPerfilUsuario).load(usuario.foto_usuario).signature(ObjectKey(uniqueId)).into(binding.ivPerfilUusario)
-                    }
                 }else{
                     Toast.makeText(activity,"Error al consultar usuario", Toast.LENGTH_SHORT).show()
                 }

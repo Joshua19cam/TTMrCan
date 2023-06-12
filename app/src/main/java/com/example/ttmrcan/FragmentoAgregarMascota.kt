@@ -88,15 +88,15 @@ class FragmentoAgregarMascota : Fragment() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val idGuardado = sharedPreferencesLogin.getInt("ip", 0)
 
         binding.buttonCancelar.setOnClickListener {
             requireActivity().onBackPressed()
         }
 
         binding.buttonGuardar.setOnClickListener {
-            camposVacios(valorUsuarioId)
+            camposVacios(idGuardado)
         }
 
         //Spinner de sexo para la mascota
@@ -180,8 +180,8 @@ class FragmentoAgregarMascota : Fragment() {
         val fechaFormateada = dateFormatD.format(fechaActual)
         val horaActual = dateFormat.format(Date()).substring(0,6)
 
-        val nombre = mascota.nombre_mascota.trim()+fechaFormateada+horaActual
-        mascota.foto_mascota = "http://192.168.100.78/upload_image/img/$nombre.png"
+        val nombre = this.mascota.nombre_mascota.trim()+fechaFormateada+horaActual
+        mascota.foto_mascota = "https://mrcanimagenes.000webhostapp.com/upload_image/img/$nombre.png"
         val imagen = ImageModel(System.currentTimeMillis().toString(),nombre.trim(),imageMascota64)
         viewModel.enviarFoto(imagen)
 

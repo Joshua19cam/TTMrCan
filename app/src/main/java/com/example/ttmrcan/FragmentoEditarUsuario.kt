@@ -99,7 +99,7 @@ class FragmentoEditarUsuario : Fragment() {
         val fotoUsuario = arguments?.getString("foto_usuario") // Foto
         usuario.foto_usuario = fotoUsuario!!
 
-        if(fotoUsuario!=""){
+        if(fotoUsuario!="0"){
             val uniqueId = System.currentTimeMillis().toString()
             Glide.with(this).load(fotoUsuario).signature(ObjectKey(uniqueId)).into(binding.imageView2)
         }
@@ -239,7 +239,8 @@ class FragmentoEditarUsuario : Fragment() {
                     //Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                     mostrarDialogo()
                     requireActivity().onBackPressed()
-
+                    val intent = Intent(activity, MenuClienteR::class.java)
+                    startActivity(intent)
                 }else{
                     Toast.makeText(activity,call.body().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -261,13 +262,19 @@ class FragmentoEditarUsuario : Fragment() {
 
     fun mandarimagen(img : String){
 
-        if (img!=""){
-            val pattern = Regex("""/(\d+)([A-Za-z0-9]+)\.png$""")
+        if (img!="0"){
+
+            val startIndex = img.lastIndexOf("/") + 1
+            val endIndex = img.lastIndexOf(".")
+            val desiredString = img.substring(startIndex, endIndex)
+
+            Toast.makeText(activity,img+desiredString,Toast.LENGTH_LONG).show()
+            /*val pattern = Regex("""/(\d+)([A-Za-z0-9]+)\.png$""")
             val matchResult = pattern.find(usuario.foto_usuario)
 
-            val variable = matchResult?.groupValues?.get(1) + matchResult?.groupValues?.get(2)
+            val variable = matchResult?.groupValues?.get(1) + matchResult?.groupValues?.get(2)*/
 
-            val imagen = ImageModel(System.currentTimeMillis().toString(),variable.toString(),imageUsuario64)
+            val imagen = ImageModel(System.currentTimeMillis().toString(),desiredString.toString(),imageUsuario64)
             viewModel.enviarFoto(imagen)
 
         }else{
@@ -278,8 +285,11 @@ class FragmentoEditarUsuario : Fragment() {
             val horaActual = dateFormat.format(Date()).substring(0,6)
 
             val nombreC = usuario.id_usuario.toString().trim()+usuario.nombre_usuario.trim()+fechaFormateada+horaActual
-            this.usuario.foto_usuario = "http://192.168.100.78/upload_image/img/$nombreC.png"
-            val imagenC = ImageModel(System.currentTimeMillis().toString(),nombreC.trim(),imageUsuario64)
+            this.usuario.foto_usuario = "https://mrcanimagenes.000webhostapp.com/upload_image/img/${nombreC.trim()}.png"
+            val cadenaSinEspacios = nombreC.replace("\\s".toRegex(), "")
+            this.usuario.foto_usuario = "https://mrcanimagenes.000webhostapp.com/upload_image/img/${cadenaSinEspacios}.png"
+
+            val imagenC = ImageModel(System.currentTimeMillis().toString(),cadenaSinEspacios,imageUsuario64)
             viewModel.enviarFoto(imagenC)
         }
 

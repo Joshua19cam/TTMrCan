@@ -1,5 +1,6 @@
 package com.example.ttmrcan
 
 object Constantes {
-    const val BASE_URL_IMAGEN = "http://192.168.100.78/upload_image/"
+    //https://mrcanimagenes.000webhostapp.com/upload_image/upload_image.php
+    const val BASE_URL_IMAGEN = "https://mrcanimagenes.000webhostapp.com/upload_image/"
 }

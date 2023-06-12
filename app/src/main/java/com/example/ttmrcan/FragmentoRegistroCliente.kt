@@ -128,9 +128,6 @@ class FragmentoRegistroCliente : Fragment() {
             return
         }
 
-        //accion
-        //agregarUsuario()
-
         val fragmentoCapcha = FragmentoCapcha()
 
         val args = Bundle()

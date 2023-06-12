@@ -1,16 +1,15 @@
 package com.example.ttmrcan
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.Toolbar
+import android.view.View
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -26,9 +25,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MenuClienteR : AppCompatActivity() {
+class MenuClienteR : AppCompatActivity(), NetworkChangeReceiver.NetworkChangeListener {
+
+    private var networkChangeReceiver: NetworkChangeReceiver? = null
 
     lateinit var toggle: ActionBarDrawerToggle
+    var usuario = Usuario(-1,"", "","","",""
+        ,"","",-1,"","","",0,
+        0,"",1)
 //    lateinit var bindingNavH : NavHeaderBinding
 
     @SuppressLint("MissingInflatedId")
@@ -36,82 +40,96 @@ class MenuClienteR : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_cliente_r)
 
-        val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorNombre = sharedPreferencesUsuario.getString("nombreCompleto",null)
-        val valorCorreo = sharedPreferencesUsuario.getString("email",null)
-        val valorImagen = sharedPreferencesUsuario.getString("img",null)
+        networkChangeReceiver = NetworkChangeReceiver()
+        networkChangeReceiver?.let {
+            it.init(this)
+            it.setOnNetworkChangeListener(object : NetworkChangeReceiver.NetworkChangeListener {
+                override fun onNetworkAvailable() {
+                    // La conexión a Internet está disponible
+                    /*val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+                    val valorNombre = sharedPreferencesUsuario.getString("nombreCompleto",null)
+                    val valorCorreo = sharedPreferencesUsuario.getString("email",null)
+                    val valorImagen = sharedPreferencesUsuario.getString("img",null)*/
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
+                    val sharedPreferencesLogin = getSharedPreferences("login", Context.MODE_PRIVATE)
+                    val correoGuardado = sharedPreferencesLogin.getString("correo", null)
 
-        val misMascotasFragment = FragmentoListaMascotas()
-        val citasFragment = FragmentoCitas()
-        val perfilFragment = FragmentoPerfilUsuario()
+                    obtenerDatos(correoGuardado.toString())
 
-        fragmentTransaction.replace(R.id.fragment_container, misMascotasFragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+                    val fragmentManager = supportFragmentManager
+                    val fragmentTransaction = fragmentManager.beginTransaction()
 
-        val drawerLayout : DrawerLayout = findViewById(R.id.drawerLayout)
-        val navView : NavigationView = findViewById(R.id.navigation_view)
+                    val misMascotasFragment = FragmentoListaMascotas()
+                    val citasFragment = FragmentoCitas()
+                    val perfilFragment = FragmentoPerfilUsuario()
 
-        //TODO Lo de nav header ejemplo
+                    fragmentTransaction.replace(R.id.fragment_container, misMascotasFragment)
+                    fragmentTransaction.addToBackStack(null)
+                    fragmentTransaction.commit()
 
-        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
-        val headerView = navigationView.getHeaderView(0)
-        val nameTextView = headerView.findViewById<TextView>(R.id.tvUserName)
-        val emailTextView = headerView.findViewById<TextView>(R.id.tvUserEmail)
-        val imgTv = headerView.findViewById<ImageView>(R.id.ivUserName)
+                    val drawerLayout : DrawerLayout = findViewById(R.id.drawerLayout)
+                    val navView : NavigationView = findViewById(R.id.navigation_view)
 
-        if(valorImagen!=""){
-            val uniqueId = System.currentTimeMillis().toString()
-            Glide.with(this).load(valorImagen).signature(ObjectKey(uniqueId)).into(imgTv)
-        }
+                    //TODO Lo de nav header ejemplo
 
-        nameTextView.text = valorNombre
-        emailTextView.text = valorCorreo
-
-
-
-        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    /*val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+                    val headerView = navigationView.getHeaderView(0)
+                    val nameTextView = headerView.findViewById<TextView>(R.id.tvUserName)
+                    val emailTextView = headerView.findViewById<TextView>(R.id.tvUserEmail)
+                    val imgTv = headerView.findViewById<ImageView>(R.id.ivUserName)
 
 
-        navView.setNavigationItemSelectedListener {
 
-            it.isChecked = true
+                    if(usuario.foto_usuario!="0"){
+                        val uniqueId = System.currentTimeMillis().toString()
+                        Glide.with(this@MenuClienteR).load(usuario.foto_usuario).signature(ObjectKey(uniqueId)).into(imgTv)
+                    }
 
-            when(it.itemId){
-                R.id.nav_mascotas -> {
-                    replaceFragment(misMascotasFragment, it.title.toString())
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                    nameTextView.text = usuario.nombre_usuario
+                    emailTextView.text = usuario.email_usuario*/
 
-                }
-                R.id.nav_citas -> {
-                    replaceFragment(citasFragment, it.title.toString())
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
-                R.id.nav_perfil -> {
-                    replaceFragment(perfilFragment, it.title.toString())
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                }
 
-                R.id.nav_logout -> {
-                    // Al presionar el botón cerrar sesión se deben eliminar los datos amacenados en Sharedpreferences
-                    val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
-                    sharedPreferences.edit().clear().apply()
-                    val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-                    sharedPreferencesUsuario.edit().clear().apply()
-                    val intent = Intent(this, FlashScreen::class.java)
-                    startActivity(intent)
-                    //finish()
-                }
-            }
-            true
-        }
+
+                    toggle = ActionBarDrawerToggle(this@MenuClienteR, drawerLayout, R.string.open,R.string.close )
+                    drawerLayout.addDrawerListener(toggle)
+                    toggle.syncState()
+
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+                    navView.setNavigationItemSelectedListener {
+
+                        it.isChecked = true
+
+                        when(it.itemId){
+                            R.id.nav_mascotas -> {
+                                replaceFragment(misMascotasFragment, it.title.toString())
+                                drawerLayout.closeDrawer(GravityCompat.START)
+
+                            }
+                            R.id.nav_citas -> {
+                                replaceFragment(citasFragment, it.title.toString())
+                                drawerLayout.closeDrawer(GravityCompat.START)
+                            }
+                            R.id.nav_perfil -> {
+                                replaceFragment(perfilFragment, it.title.toString())
+                                drawerLayout.closeDrawer(GravityCompat.START)
+                            }
+
+                            R.id.nav_logout -> {
+                                // Al presionar el botón cerrar sesión se deben eliminar los datos amacenados en Sharedpreferences
+                                val sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE)
+                                sharedPreferences.edit().clear().apply()
+                                val sharedPreferencesUsuario = getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+                                sharedPreferencesUsuario.edit().clear().apply()
+
+                                finish()
+                                val intent = Intent(this@MenuClienteR, FlashScreen::class.java)
+                                startActivity(intent)
+                            }
+                        }
+                        true
+                    }
 
 //        if (savedInstanceState == null) {
 //            supportFragmentManager.beginTransaction()
@@ -119,6 +137,22 @@ class MenuClienteR : AppCompatActivity() {
 //                .commit()
 //        }
 
+
+                }
+
+                override fun onNetworkUnavailable() {
+                    // No hay conexión a Internet, muestra el diálogo
+                    mostrarDialogo()
+                }
+            })
+        }
+
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        networkChangeReceiver?.release(this)
     }
 
     override fun onBackPressed() {
@@ -156,6 +190,63 @@ class MenuClienteR : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun mostrarDialogo() {
+        val dialogo = this.let { Dialog(it, R.style.CustomDialogStyle) }
+        dialogo.setContentView(R.layout.dialogo_no_conexion)
+        val titulo = dialogo.findViewById<TextView>(R.id.dialogo_correcto)
+        val subtitulo = dialogo.findViewById<TextView>(R.id.dialogo_correcto_sub)
+        val btn = dialogo.findViewById<Button>(R.id.buttonOk)
+        titulo?.text = "Sin conexión a Internet"
+        subtitulo?.text = "No estás conectado a Internet. Por favor, verifica tu conexión e inténtalo nuevamente."
+        btn?.setOnClickListener {
+            finishAffinity()
+        }
+
+        dialogo?.setCancelable(false)
+        dialogo?.show()
+    }
+
+    fun obtenerDatos(email: String){
+
+        val sharedPreferencesLogin = getSharedPreferences("login", Context.MODE_PRIVATE)
+        val idGuardado = sharedPreferencesLogin.getInt("ip", 0)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = RetrofitClient.webServ.obtenerIdUsuario(email)
+            runOnUiThread{
+                if(call.isSuccessful){
+                    usuario = call.body()!!
+                    val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+                    val headerView = navigationView.getHeaderView(0)
+                    val nameTextView = headerView.findViewById<TextView>(R.id.tvUserName)
+                    val emailTextView = headerView.findViewById<TextView>(R.id.tvUserEmail)
+                    val imgTv = headerView.findViewById<ImageView>(R.id.ivUserName)
+
+                    sharedPreferencesLogin.edit().putInt("ip",usuario.id_usuario).apply()
+
+                    if(usuario.foto_usuario!="0"){
+                        val uniqueId = System.currentTimeMillis().toString()
+                        Glide.with(this@MenuClienteR).load(usuario.foto_usuario).signature(ObjectKey(uniqueId)).into(imgTv)
+                    }
+
+                    nameTextView.text = usuario.nombre_usuario
+                    emailTextView.text = usuario.email_usuario
+
+                }else{
+                    Toast.makeText(this@MenuClienteR,"Error al consultar usuario",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onNetworkAvailable() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onNetworkUnavailable() {
+        TODO("Not yet implemented")
     }
 
 }

@@ -175,7 +175,7 @@ class FragmentoEditarMascota : Fragment() {
             val horaActual = dateFormat.format(Date()).substring(0,6)
 
             val nombreC = mascota.nombre_mascota.trim()+fechaFormateada+horaActual
-            this.mascota.foto_mascota = "http://192.168.100.78/upload_image/img/$nombreC.png"
+            this.mascota.foto_mascota = "https://mrcanimagenes.000webhostapp.com/upload_image/img/$nombreC.png"
             val imagenC = ImageModel(System.currentTimeMillis().toString(),nombreC.trim(),imageMascota64)
             viewModel.enviarFoto(imagenC)
         }
@@ -260,11 +260,6 @@ class FragmentoEditarMascota : Fragment() {
                 }
             }
         }
-    }
-
-    fun validarCampos(): Boolean{
-        return !(binding.editNombreMascotaE.text.isNullOrEmpty()||binding.editColorMascotaE.text.isNullOrEmpty()
-                ||binding.editRazaMascotaE.text.isNullOrEmpty()||binding.editFechaMascotaE.text.isNullOrEmpty())
     }
 
     private fun mostrarDialogo() {

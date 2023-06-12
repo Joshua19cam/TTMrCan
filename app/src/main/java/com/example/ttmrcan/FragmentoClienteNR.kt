@@ -60,16 +60,18 @@ class FragmentoClienteNR : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Se manda llamar las variables guardadas en SharedPreferences guardadas anteriormente
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorObtenidoEmail = sharedPreferencesUsuario.getString("email","")
+
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val correoGuardado = sharedPreferencesLogin.getString("correo", null)
 
         val emailUsuario = arguments?.getString("email_usuario_capcha")
+        sharedPreferencesLogin.edit().putString("email",emailUsuario).apply()
 
         // Función que se encarga de llamar al metodo para obtener los datos del correo ingresado
-        if(valorObtenidoEmail.isNullOrEmpty()){
+        if(correoGuardado.isNullOrEmpty()){
             mostrarPerfilNR(emailUsuario.toString())
         }else{
-            mostrarPerfilNR(valorObtenidoEmail.toString())
+            mostrarPerfilNR(correoGuardado.toString())
         }
 
         binding.btnCerrarSesion.setOnClickListener {
@@ -103,17 +105,22 @@ class FragmentoClienteNR : Fragment() {
 
     @SuppressLint("SetTextI18n")
     fun mostrarPerfilNR(email : String){
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
 
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             activity?.runOnUiThread{
                 if(call.isSuccessful){
                     usuarioNR = call.body()!!
+
+                    sharedPreferencesLogin.edit().putInt("ip",usuarioNR.id_usuario).apply()
+
                     binding.textNombreCliente.setText(
                         "${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}"
                     )
                     binding.textViewInfoDatos.setText(
                         "Información personal:\n${usuarioNR.nombre_usuario} ${usuarioNR.apellido_usuario}\n${usuarioNR.telefono_usuario}\n${usuarioNR.email_usuario}")
+
                 }else{
                     Toast.makeText(activity,"Error al consultar usuario",Toast.LENGTH_SHORT).show()
                 }

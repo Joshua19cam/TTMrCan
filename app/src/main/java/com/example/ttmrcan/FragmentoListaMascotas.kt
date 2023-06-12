@@ -63,8 +63,8 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferencesUsuario = requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorUsuarioId = sharedPreferencesUsuario.getInt("id",2)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val idGuardado = sharedPreferencesLogin.getInt("ip", 0)
 
         val fragmentoAgregarMascota = FragmentoAgregarMascota()
 
@@ -72,7 +72,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
         binding.recyclerViewMascotas.layoutManager = GridLayoutManager(activity,2)
         setupRecyclerView()
 
-        obtenerMascotas(valorUsuarioId)
+        obtenerMascotas(idGuardado)
 
         binding.buttonAgregarMascota.setOnClickListener {
 
@@ -102,6 +102,7 @@ class FragmentoListaMascotas : Fragment(), MascotaAdapter.OnItemClicked{
     }
 
     fun obtenerMascotas(id: Int){
+
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerMascotasUsuario(id)
             activity?.runOnUiThread{

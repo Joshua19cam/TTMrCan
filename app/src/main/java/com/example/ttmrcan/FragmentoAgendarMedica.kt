@@ -75,10 +75,9 @@ class FragmentoAgendarMedica : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferencesUsuario =
-            requireContext().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
-        val valorUsuarioId = sharedPreferencesUsuario.getInt("id", 2)
-        this.cita.id_usuario = valorUsuarioId
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
+        val idGuardado = sharedPreferencesLogin.getInt("ip", 0)
+        this.cita.id_usuario = idGuardado
 
         val tipoCita = arguments?.getString("tipo_cita")
         this.cita.tipo_cita = tipoCita.toString()
@@ -96,7 +95,7 @@ class FragmentoAgendarMedica : Fragment() {
         }
 
 
-        obtenerMascotasUsuario(valorUsuarioId)
+        obtenerMascotasUsuario(idGuardado)
 
         binding.btnAgendarCitaMedica.setOnClickListener {
             // validar que todos lo campos esten llenos

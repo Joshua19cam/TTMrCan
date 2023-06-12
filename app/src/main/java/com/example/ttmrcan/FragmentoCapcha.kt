@@ -58,7 +58,7 @@ class FragmentoCapcha : Fragment() {
 
     var usuario = Usuario(-1,"", "","","",""
         ,"","",-1,"","","",0,
-        0,"",1)
+        0,"0",1)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

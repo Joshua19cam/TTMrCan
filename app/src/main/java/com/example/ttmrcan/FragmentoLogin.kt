@@ -98,6 +98,9 @@ class FragmentoLogin : Fragment() {
                     Toast.makeText(activity, "Por favor ingrese correo y contraseña", Toast.LENGTH_SHORT).show()
                 }
             }
+
+
+
         }
         //Esto es para que se salga de la app estando en el fragment login
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -111,10 +114,6 @@ class FragmentoLogin : Fragment() {
                 }
             }
         })
-
-
-
-// ESTOS SON LOS LISTENER DE LOS BOTONES
 
         binding.tvOlvidasteContraseA.setOnClickListener{
             val fragmentoRecuperarC = FragmentoRecuperarContrasena()
@@ -150,18 +149,17 @@ class FragmentoLogin : Fragment() {
 
     fun corroborarEstaus(email : String){
 
-        val sharedPreferencesUsuario = requireActivity().getSharedPreferences("idUsuario", Context.MODE_PRIVATE)
+        val sharedPreferencesLogin = requireContext().getSharedPreferences("login", Context.MODE_PRIVATE)
 
         CoroutineScope(Dispatchers.IO).launch {
             val call = RetrofitClient.webServ.obtenerIdUsuario(email)
             activity?.runOnUiThread{
                 if (call.isSuccessful){
                     usuario=call.body()!!
+                    sharedPreferencesLogin.edit().putInt("ip",usuario.id_usuario).apply()
                     if (usuario.estatus_usuario!=2){
                         //Lo manda al perfil que NO esta dado de alta
                         val fragmentoClienteNR = FragmentoClienteNR()
-                        // Almacena El id y el email del usuario en sharedPreferences para utilizarlos en los demas fragments
-                        sharedPreferencesUsuario.edit().putString("email",usuario.email_usuario).apply()
                         // Cambio del fragment Login al fragment ClienteNR cuando no está dado de alta en el sistema
                         val fragmentTransaction = requireFragmentManager().beginTransaction()
                         fragmentTransaction.setCustomAnimations(
@@ -174,22 +172,23 @@ class FragmentoLogin : Fragment() {
                         fragmentTransaction.addToBackStack(null)
                         fragmentTransaction.commit()
                         // Se limpian los edit text
-                        /*binding.editTextCorreoLogIn.setText("")
-                        binding.editTextPasswordLogIn.setText("")*/
+                        binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")
 
 
                     }else {
                         //lo manda al perfil que esta dado de alta --Lo de pala
-                        sharedPreferencesUsuario.edit().putInt("id",usuario.id_usuario).apply()
+                        /*sharedPreferencesUsuario.edit().putInt("id",usuario.id_usuario).apply()
                         sharedPreferencesUsuario.edit().putString("email",usuario.email_usuario).apply()
                         sharedPreferencesUsuario.edit().putString("nombreCompleto","${usuario.nombre_usuario} ${usuario.apellido_usuario}").apply()
-                        sharedPreferencesUsuario.edit().putString("img",usuario.foto_usuario).apply()
+                        sharedPreferencesUsuario.edit().putString("img",usuario.foto_usuario).apply()*/
                         // Cambio del fragment Login a la activity MenuCliente cuando ya está dado de alta en el sistema
                         val intent = Intent(activity, MenuClienteR::class.java)
+                        intent.putExtra("email",email)
                         startActivity(intent)
                         // Se limpian los edit text
-                        /*binding.editTextCorreoLogIn.setText("")
-                        binding.editTextPasswordLogIn.setText("")*/
+                        binding.editTextCorreoLogIn.setText("")
+                        binding.editTextPasswordLogIn.setText("")
                     }
 
                 }else{
